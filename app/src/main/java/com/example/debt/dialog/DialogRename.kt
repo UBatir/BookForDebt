@@ -1,4 +1,4 @@
-package com.example.debt.activities
+package com.example.debt.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.SimpleAdapter
 import com.example.debt.R
+import com.example.debt.data.Contact
+import com.example.debt.activities.MainActivity
 import kotlinx.android.synthetic.main.dialog_rename.*
 import java.util.ArrayList
 import java.util.HashMap

@@ -1,4 +1,4 @@
-package com.example.debt.activities
+package com.example.debt.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -10,12 +10,16 @@ import android.widget.AutoCompleteTextView
 import android.widget.SimpleAdapter
 import android.widget.Toast
 import com.example.debt.R
+import com.example.debt.activities.*
+import com.example.debt.data.Contact
+import com.example.debt.interfaces.SetData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_add_contact.*
 import java.util.*
 
-class AddContactDialog(context: Context, private val activity: MainActivity):Dialog(context),SetData {
+class AddContactDialog(context: Context, private val activity: MainActivity):Dialog(context),
+    SetData {
 
     private lateinit var mPeopleList:ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
@@ -99,11 +103,12 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             dismiss()
         }
         tvSane.setOnClickListener{
-            val dialog=DataDialog(context,this)
+            val dialog= DataDialog(context, this)
             dialog.show()
         }
         calculator.setOnClickListener {
-            val dialog= CalculatorDialog(context,this)
+            val dialog=
+                CalculatorDialog(context, this)
             dialog.show()
         }
 

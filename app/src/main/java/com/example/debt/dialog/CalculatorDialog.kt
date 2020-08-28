@@ -1,14 +1,15 @@
-package com.example.debt.activities
+package com.example.debt.dialog
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import com.example.debt.R
+import com.example.debt.interfaces.SetData
 import kotlinx.android.synthetic.main.dialog_calculator.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.Exception
 
-class CalculatorDialog(context: Context, private val listener:SetData): Dialog(context) {
+class CalculatorDialog(context: Context, private val listener: SetData): Dialog(context) {
 
     var sum:Long = 0
 

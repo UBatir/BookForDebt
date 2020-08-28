@@ -1,4 +1,4 @@
-package com.example.debt.activities
+package com.example.debt.adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.debt.R
-import kotlinx.android.synthetic.main.dialog_change_balance.view.*
+import com.example.debt.activities.MainActivity
+import com.example.debt.data.Contact
+import com.example.debt.interfaces.ContactItemClickListener
 import kotlinx.android.synthetic.main.dialog_change_balance.view.tvName
 import kotlinx.android.synthetic.main.dialog_change_balance.view.tvSumma
 import kotlinx.android.synthetic.main.item_contact.view.*
@@ -18,7 +20,7 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
 
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         @SuppressLint("SetTextI18n")
-        fun populateModel(model:Contact, activity: MainActivity){
+        fun populateModel(model: Contact, activity: MainActivity){
             itemView.tvName.text=model.name
             itemView.tvKommentariy.text=model.comment
             itemView.btnOptions.setOnClickListener{

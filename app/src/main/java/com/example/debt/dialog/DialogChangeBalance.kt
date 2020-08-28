@@ -1,4 +1,4 @@
-package com.example.debt.activities
+package com.example.debt.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -8,16 +8,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.example.debt.R
-import kotlinx.android.synthetic.main.dialog_add_contact.*
+import com.example.debt.data.Contact
+import com.example.debt.activities.MainActivity
+import com.example.debt.interfaces.SetData
 import kotlinx.android.synthetic.main.dialog_add_contact.etSumma
 import kotlinx.android.synthetic.main.dialog_add_contact.tvSane
 import kotlinx.android.synthetic.main.dialog_change_balance.*
 import java.util.*
 
-class DialogChangeBalance(private val activity: MainActivity, private val id:Int): Dialog(activity),SetData{
+class DialogChangeBalance(private val activity: MainActivity, private val id:Int): Dialog(activity),
+    SetData {
 
     lateinit var dao: ContactDao
-    lateinit var currentContact:Contact
+    lateinit var currentContact: Contact
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +36,7 @@ class DialogChangeBalance(private val activity: MainActivity, private val id:Int
         val day=c.get(Calendar.DAY_OF_MONTH)
         tvSane.text="$day.${month+1}.$year"
         tvSane.setOnClickListener{
-            val dialog= DataDialog(context,this)
+            val dialog= DataDialog(context, this)
             dialog.show()
         }
         if(currentContact.debt==1){
@@ -165,7 +168,7 @@ class DialogChangeBalance(private val activity: MainActivity, private val id:Int
         }
 
         calculator1.setOnClickListener {
-            val dialog= CalculatorDialog(context,this)
+            val dialog= CalculatorDialog(context, this)
             dialog.show()
         }
 

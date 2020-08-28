@@ -14,6 +14,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.debt.R
+import com.example.debt.adapters.ListAdapter
+import com.example.debt.data.Contact
+import com.example.debt.dialog.AddContactDialog
+import com.example.debt.dialog.DialogChangeBalance
+import com.example.debt.dialog.DialogRename
+import com.example.debt.interfaces.ContactItemClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar

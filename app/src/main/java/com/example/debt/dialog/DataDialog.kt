@@ -1,4 +1,4 @@
-package com.example.debt.activities
+package com.example.debt.dialog
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.format.DateUtils
 import com.example.debt.R
+import com.example.debt.interfaces.SetData
 import kotlinx.android.synthetic.main.dialog_data.*
 import java.util.*
 
