@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemAmount"
+        android:title="Погасить всю сумму"/>
+    <item
+        android:id="@+id/itemChangeBalance"
+        android:title="Изменить баланс"/>
+    <item
+        android:id="@+id/itemHistory"
+        android:title="История операций"/>
+    <item
+        android:id="@+id/itemCleanHistory"
+        android:title="Очистить историю"/>
+    <item
+        android:id="@+id/itemRename"
+        android:title="Переименовать"/>
+    <item
+        android:id="@+id/itemDelete"
+        android:title="Удалить контакт"/>
+</menu>

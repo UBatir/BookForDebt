@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minWidth="280dp">
+
+    <TextView
+        android:id="@+id/tvTitleBalanstiOzgertiw"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Изменение баланса"
+        android:gravity="bottom"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tvTitleBalanstiOzgertiw"
+        app:layout_constraintEnd_toStartOf="@id/tvSumma"
+        app:layout_constraintTop_toBottomOf="@id/tvTitleBalanstiOzgertiw"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:text="qwertyuiop" />
+
+    <TextView
+        android:id="@+id/tvSumma"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="@id/tvTitleBalanstiOzgertiw"
+        app:layout_constraintTop_toBottomOf="@id/tvTitleBalanstiOzgertiw"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginStart="8dp"
+        android:text="200"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#669E9B9B"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="@id/tvSumma"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintBottom_toTopOf="@id/etSumma"/>
+
+    <ImageView
+        android:id="@+id/calculator1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="@id/line"
+        app:layout_constraintEnd_toStartOf="@id/etSumma"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:src="@drawable/calculator"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etSumma"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Сумма"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@id/calculator1"
+        app:layout_constraintEnd_toStartOf="@id/tvSane"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvSane"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/etSumma"
+        app:layout_constraintEnd_toEndOf="@id/line"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="25 июн.2020"
+        android:textSize="16sp"/>
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etKommentariy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/calculator1"
+        app:layout_constraintEnd_toEndOf="@id/tvSane"
+        app:layout_constraintTop_toBottomOf="@id/etSumma"
+        android:layout_marginTop="8dp"
+        android:hint="Комментарий"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/btnMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/etKommentariy"
+        app:layout_constraintEnd_toStartOf="@id/btnPlus"
+        app:layout_constraintTop_toBottomOf="@id/etKommentariy"
+        android:text="МИНУС"
+        android:textStyle="bold"
+        android:textColor="#e53935"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:padding="8dp" />
+
+
+    <TextView
+        android:id="@+id/btnPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/btnMinus"
+        app:layout_constraintEnd_toEndOf="@id/etKommentariy"
+        app:layout_constraintTop_toBottomOf="@id/etKommentariy"
+        android:text="ПЛЮС"
+        android:textStyle="bold"
+        android:textColor="#43A047"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginStart="8dp"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/tvMinusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/btnMinus"
+        app:layout_constraintTop_toBottomOf="@id/btnMinus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="1234"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:maxLength="12"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"/>
+
+
+    <TextView
+        android:id="@+id/tvPlusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/btnPlus"
+        app:layout_constraintTop_toBottomOf="@id/btnPlus"
+        android:text="1234"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:maxLength="12"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvBoladi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/tvMinusText"
+        app:layout_constraintEnd_toStartOf="@id/tvPlusText"
+        app:layout_constraintTop_toBottomOf="@id/btnPlus"
+        android:text="будет"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <ImageView
+        android:id="@+id/ivMinus"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toEndOf="@id/tvMinusText"
+        app:layout_constraintEnd_toStartOf="@id/tvBoladi"
+        app:layout_constraintTop_toBottomOf="@id/btnMinus"
+        android:paddingTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+
+    <ImageView
+        android:id="@+id/ivPlus"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_baseline_arrow_forward_24"
+        app:layout_constraintStart_toEndOf="@id/tvBoladi"
+        app:layout_constraintTop_toBottomOf="@id/btnPlus"
+        android:paddingTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

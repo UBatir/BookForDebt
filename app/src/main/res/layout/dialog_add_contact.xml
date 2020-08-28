@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="280dp"
+    android:background="#FAFAFA"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Добавление"
+        android:gravity="bottom"
+        android:textColor="#DE000000"/>
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/actvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Имя контакта"
+        android:inputType="text"
+        android:completionThreshold="1"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_marginTop="@dimen/margin_standard"/>
+
+    <ImageView
+        android:id="@+id/calculator"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="@id/actvName"
+        app:layout_constraintEnd_toStartOf="@id/etSumma"
+        app:layout_constraintTop_toBottomOf="@id/actvName"
+        android:src="@drawable/calculator"
+        android:padding="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etSumma"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Сумма"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@id/tvSane"
+        app:layout_constraintStart_toEndOf="@id/calculator"
+        app:layout_constraintTop_toBottomOf="@id/actvName"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvSane"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/etSumma"
+        app:layout_constraintEnd_toEndOf="@id/actvName"
+        app:layout_constraintTop_toBottomOf="@id/actvName"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:textSize="16sp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etKommentariy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/calculator"
+        app:layout_constraintEnd_toEndOf="@id/tvSane"
+        app:layout_constraintTop_toBottomOf="@id/etSumma"
+        android:layout_marginTop="8dp"
+        android:hint="Комментарий"
+        android:inputType="text" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constr"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etKommentariy"
+        android:layout_marginTop="28dp">
+
+        <TextView
+            android:id="@+id/btnBiykarlaw"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="ОТМЕНА"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:background="#FAFAFA"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/constr"
+            app:layout_constraintBottom_toBottomOf="@id/constr"/>
+
+        <TextView
+            android:id="@+id/btnQariz"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="МИНУС"
+            android:background="#FAFAFA"
+            android:textStyle="bold"
+            android:textColor="#fe0101"
+            app:layout_constraintEnd_toStartOf="@id/btnPayda"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="@id/constr"
+            app:layout_constraintBottom_toBottomOf="@id/constr"/>
+
+        <TextView
+            android:id="@+id/btnPayda"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="ПЛЮС"
+            android:textSize="14sp"
+            android:background="#FAFAFA"
+            android:textStyle="bold"
+            android:textColor="#0aee2a"
+            app:layout_constraintEnd_toEndOf="@id/constr"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            app:layout_constraintTop_toTopOf="@id/constr"
+            app:layout_constraintBottom_toBottomOf="@id/constr"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

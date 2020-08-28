@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "453948926925",
+    "firebase_url": "https://bookfordebt-745fc.firebaseio.com",
+    "project_id": "bookfordebt-745fc",
+    "storage_bucket": "bookfordebt-745fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453948926925:android:320f19bb5959200aacf284",
+        "android_client_info": {
+          "package_name": "com.example.debt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453948926925-a56vsds25u3k70bcuba3958gp7ha8aj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqO3_w4DqKEd9jGIQ3E5xtmvHrSRrQ1CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453948926925-a56vsds25u3k70bcuba3958gp7ha8aj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
