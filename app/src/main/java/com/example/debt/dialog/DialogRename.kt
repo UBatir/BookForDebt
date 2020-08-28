@@ -15,7 +15,6 @@ import java.util.HashMap
 
 class DialogRename(private val id: Int,private val activity: MainActivity): Dialog(activity) {
 
-    lateinit var dao:ContactDao
     lateinit var currentContact: Contact
     private lateinit var mPeopleList: ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
@@ -40,14 +39,11 @@ class DialogRename(private val id: Int,private val activity: MainActivity): Dial
                 mTxtPhoneNo.setSelection(mTxtPhoneNo.text!!.length)
             }
 
-        dao=NotebookDatabase.getInstance(activity).dao()
-        currentContact=dao.getContactById(id)
         actvRename.setText(currentContact.name)
         actvRename.setSelection(actvRename.text.length)
         tvRename.text = currentContact.name
         btnAtinOzgertiw.setOnClickListener {
             currentContact.name=actvRename.text.toString()
-            activity.rewriteContact(currentContact)
             dismiss()
         }
         btnBiykarlaw.setOnClickListener {

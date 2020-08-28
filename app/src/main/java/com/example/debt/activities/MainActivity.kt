@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -49,9 +50,8 @@ class MainActivity : AppCompatActivity(),
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         recyclerView.adapter=adapter
-        dao=NotebookDatabase.getInstance(this).dao()
-        adapter.models= dao.getAllContact()
         totalSum()
+        getData()
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             val dialog=
@@ -93,29 +93,30 @@ class MainActivity : AppCompatActivity(),
             return@setNavigationItemSelectedListener true
         }
 
-        ivSort.setOnClickListener {
-            val dialog=DialogSort(this, this)
-            dialog.show()
+    }
+
+    private fun getData(){
+        val result: MutableList<Contact> = mutableListOf()
+        db.collection("contacts").addSnapshotListener { value, error ->
+            if (error!=null){
+                Toast.makeText(applicationContext, error.message.toString(), Toast.LENGTH_LONG).show()
+                return@addSnapshotListener
+            }
+            result.clear()
+        db.collection("contacts").get().addOnSuccessListener {
+            it.documents.forEach {
+                doc ->
+                val model = doc.toObject(Contact::class.java)
+                model?.let {
+                    result.add(model)
+                }
+            }
+            adapter.models = result
+            }
         }
     }
 
-    fun addContact(contact: Contact){
-        dao.insertContact(contact)
-        adapter.models= dao.getAllContact()
-        totalSum()
-    }
 
-    private fun removeContact(contact: Contact){
-        dao.deleteContact(contact)
-        adapter.models=dao.getAllContact()
-        totalSum()
-    }
-
-    fun rewriteContact(contact: Contact){
-        dao.updateContact(contact)
-        adapter.models=dao.getAllContact()
-        totalSum()
-    }
 
     @SuppressLint("SetTextI18n")
     private fun totalSum(){
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity(),
             when(it.itemId){
                 R.id.itemAmount -> {
                     val value = contact.summa
-                    contact.summa = 0
+                    contact.summa.toInt()
                     contact.debt = -1
                     val snackBar = Snackbar.make(
                         view,
@@ -155,18 +156,16 @@ class MainActivity : AppCompatActivity(),
                         Snackbar.LENGTH_LONG
                     )
                     snackBar.setAction("Biykarlaw") {
-                        if (value > 0) {
+                        if (value.toInt() > 0) {
                             contact.summa = value
                             contact.debt = 1
                         } else {
                             contact.summa = value
                             contact.debt = 0
                         }
-                        rewriteContact(contact)
                         snackBar.dismiss()
                     }
                     snackBar.setActionTextColor(Color.rgb(253, 216, 53))
-                    rewriteContact(contact)
                     snackBar.show()
                 }
                 R.id.itemChangeBalance -> {
@@ -194,7 +193,6 @@ class MainActivity : AppCompatActivity(),
                                 + "\n" + "\n" + "«${contact.summa}» mug'dari usi kontakt penen baylanisli. Eleda dawam etpekshisizba?"
                     )
                     dialog.setPositiveButton("Oshiriw") { _, _ ->
-                        removeContact(contact)
                     }
                     dialog.setNegativeButton("Biykarlaw") { _, _ ->
                     }

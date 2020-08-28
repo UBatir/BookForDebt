@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_add_contact.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class AddContactDialog(context: Context, private val activity: MainActivity):Dialog(context),
     SetData {
@@ -65,40 +66,10 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
                     Toast.LENGTH_SHORT
                 ).show()
             } else{
-                activity.addContact(
-                    Contact(
-                        actvName.text.toString(),
-                        etKommentariy.text.toString(),
-                        etSumma.text.toString().toLong(),
-                        "$day.${month + 1}.$year",
-                        1
-                    )
-                )
                 dismiss()
             }
         }
-        btnQariz.setOnClickListener{
-            if(actvName.text.toString() == ""){
-                Toast.makeText(context, "Ati kirgizilmegen, qosatin esset joq!", Toast.LENGTH_SHORT).show()
-            } else if(etSumma.text.toString()==""||etSumma.text.toString().toInt()==0){
-                Toast.makeText(
-                    context,
-                    "Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else{
-                activity.addContact(
-                    Contact(
-                        actvName.text.toString(),
-                        etKommentariy.text.toString(),
-                        -etSumma.text.toString().toLong(),
-                        "$day.${month + 1}.$year",
-                        0
-                    )
-                )
-                dismiss()
-            }
-        }
+
         btnBiykarlaw.setOnClickListener {
             dismiss()
         }
@@ -112,8 +83,34 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             dialog.show()
         }
 
+        btnPayda.setOnClickListener {
+            addContact()
+        }
+
+        btnQariz.setOnClickListener {
+            addContact()
+        }
     }
 
+    fun addContact(){
+        if (actvName.text.isNotEmpty() && etSumma.text!!.isNotEmpty()){
+            val map: MutableMap<String, Any> = mutableMapOf()
+        db.collection("contacts").document()
+            map["name"] = actvName.text.toString()
+            map["comment"] = etKommentariy.text.toString()
+            map["summa"] = etSumma.text.toString().toLong()
+            map["date"] = tvSane.text.toString()
+        db.collection("contacts").document().set(map)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Было добавлено", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, it.localizedMessage, Toast.LENGTH_LONG).show()
+            }
+        }else{
+            Toast.makeText(context, "Заполните поля", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun populatePeopleList() {
         mPeopleList.clear()
