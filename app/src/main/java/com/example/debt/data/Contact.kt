@@ -5,5 +5,5 @@ data class Contact(var name:String=" ",
               var summa: String =" ",
               var date:String= " ",
               var debt:Int = 0,
-              var id: Int = 0
+              var id: String = ""
 )

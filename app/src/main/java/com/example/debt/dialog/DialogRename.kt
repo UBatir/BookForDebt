@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.dialog_rename.*
 import java.util.ArrayList
 import java.util.HashMap
 
-class DialogRename(private val id: Int,private val activity: MainActivity): Dialog(activity) {
+class DialogRename(private val id: String, private val activity: MainActivity): Dialog(activity) {
 
     lateinit var currentContact: Contact
     private lateinit var mPeopleList: ArrayList<Map<String, String>>

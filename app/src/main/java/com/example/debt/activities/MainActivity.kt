@@ -1,7 +1,6 @@
 package com.example.debt.activities
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -26,7 +25,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity(),
     private val adapter= ListAdapter(this, this)
     private val db=FirebaseFirestore.getInstance()
     private val mAuth=FirebaseAuth.getInstance()
-
+    private var docId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +97,8 @@ class MainActivity : AppCompatActivity(),
 
     private fun getData(){
         val result: MutableList<Contact> = mutableListOf()
-                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").addSnapshotListener { value, error ->
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
+                    .addSnapshotListener { value, error ->
                     if (error != null) {
                         Toast.makeText(
                             applicationContext,
@@ -113,6 +112,8 @@ class MainActivity : AppCompatActivity(),
                       .addOnSuccessListener {
                           it.documents.forEach {doc ->
                               val model = doc.toObject(Contact::class.java)
+                              model?.id = doc.id
+                              docId = doc.id
                               model?.let {
                                   result.add(model)
                               }
@@ -124,13 +125,9 @@ class MainActivity : AppCompatActivity(),
 
 
     private fun deleteData(){
-      val docRef= db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document()
-        val updates = hashMapOf<String, Any>(
-            "name" to FieldValue.delete()
-          //  "summa" to FieldValue.delete(),
-         //   "comment" to FieldValue.delete()
-        )
-            docRef.update(updates).addOnCompleteListener {
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(docId)
+            .delete()
+            .addOnSuccessListener {
                 Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()
             }
     }
@@ -158,7 +155,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    fun onOptionsButtonClick(view: View, contact: Contact, id: Int){
+    fun onOptionsButtonClick(view: View, contact: Contact, id: String){
         val optionsMenu=PopupMenu(this, view)
         val menuInflater=optionsMenu.menuInflater
         menuInflater.inflate(R.menu.menu_item_options, optionsMenu.menu)
@@ -223,7 +220,7 @@ class MainActivity : AppCompatActivity(),
         optionsMenu.show()
     }
 
-    override fun onContactItemClick(id: Int) {
+    override fun onContactItemClick(id: String) {
         val dialog=
             DialogChangeBalance(
                 this,

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.dialog_add_contact.tvSane
 import kotlinx.android.synthetic.main.dialog_change_balance.*
 import java.util.*
 
-class DialogChangeBalance(private val activity: MainActivity, private val id:Int): Dialog(activity),
+class DialogChangeBalance(private val activity: MainActivity, private val id: String): Dialog(activity),
     SetData {
 
     lateinit var currentContact: Contact
