@@ -95,12 +95,11 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     fun addContact(){
         if (actvName.text.isNotEmpty() && etSumma.text!!.isNotEmpty()){
             val map: MutableMap<String, Any> = mutableMapOf()
-        db.collection("contacts").document()
             map["name"] = actvName.text.toString()
             map["comment"] = etKommentariy.text.toString()
-            map["summa"] = etSumma.text.toString().toLong()
+            map["summa"] = etSumma.text.toString()
             map["date"] = tvSane.text.toString()
-        db.collection("contacts").document().set(map)
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
             .addOnSuccessListener {
                 Toast.makeText(context, "Было добавлено", Toast.LENGTH_SHORT).show()
             }

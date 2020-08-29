@@ -1,6 +1,7 @@
 package com.example.debt.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -25,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -97,25 +99,41 @@ class MainActivity : AppCompatActivity(),
 
     private fun getData(){
         val result: MutableList<Contact> = mutableListOf()
-        db.collection("contacts").addSnapshotListener { value, error ->
-            if (error!=null){
-                Toast.makeText(applicationContext, error.message.toString(), Toast.LENGTH_LONG).show()
-                return@addSnapshotListener
-            }
-            result.clear()
-        db.collection("contacts").get().addOnSuccessListener {
-            it.documents.forEach {
-                doc ->
-                val model = doc.toObject(Contact::class.java)
-                model?.let {
-                    result.add(model)
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Toast.makeText(
+                            applicationContext,
+                            error.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@addSnapshotListener
+                    }
+                    result.clear()
+                  db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").get()
+                      .addOnSuccessListener {
+                          it.documents.forEach {doc ->
+                              val model = doc.toObject(Contact::class.java)
+                              model?.let {
+                                  result.add(model)
+                              }
+                          }
+                          adapter.models = result
+                      }
                 }
-            }
-            adapter.models = result
-            }
         }
-    }
 
+
+    private fun deleteData(){
+      val docRef= db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document()
+        val updates = hashMapOf<String, Any>(
+            "name" to FieldValue.delete()
+          //  "summa" to FieldValue.delete(),
+         //   "comment" to FieldValue.delete()
+        )
+            docRef.update(updates).addOnCompleteListener {
+                Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()
+            }
+    }
 
 
     @SuppressLint("SetTextI18n")
@@ -193,6 +211,7 @@ class MainActivity : AppCompatActivity(),
                                 + "\n" + "\n" + "«${contact.summa}» mug'dari usi kontakt penen baylanisli. Eleda dawam etpekshisizba?"
                     )
                     dialog.setPositiveButton("Oshiriw") { _, _ ->
+                        deleteData()
                     }
                     dialog.setNegativeButton("Biykarlaw") { _, _ ->
                     }
