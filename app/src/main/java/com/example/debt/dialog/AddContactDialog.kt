@@ -25,8 +25,9 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     private lateinit var mPeopleList:ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
-    val db=FirebaseFirestore.getInstance()
-    val mAuth=FirebaseAuth.getInstance()
+    private val db=FirebaseFirestore.getInstance()
+    private val mAuth=FirebaseAuth.getInstance()
+    lateinit var currentContact:Contact
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,21 +85,24 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         }
 
         btnPayda.setOnClickListener {
-            addContact()
+            currentContact.debt=1
+            addContact(currentContact.debt)
         }
 
         btnQariz.setOnClickListener {
-            addContact()
+            currentContact.debt=0
+            addContact(currentContact.debt)
         }
     }
 
-    fun addContact(){
+    fun addContact(debt:Int){
         if (actvName.text.isNotEmpty() && etSumma.text!!.isNotEmpty()){
             val map: MutableMap<String, Any> = mutableMapOf()
             map["name"] = actvName.text.toString()
             map["comment"] = etKommentariy.text.toString()
             map["summa"] = etSumma.text.toString()
             map["date"] = tvSane.text.toString()
+            map["debt"]=debt
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
             .addOnSuccessListener {
                 Toast.makeText(context, "Было добавлено", Toast.LENGTH_SHORT).show()
@@ -140,6 +144,6 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     }
 
     override fun setSum(sum: Long) {
-        etSumma.setText("$sum")
+        etSumma.setText(sum.toString())
     }
 }

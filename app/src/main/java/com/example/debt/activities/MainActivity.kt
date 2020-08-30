@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity(),
                     contact.debt = -1
                     val snackBar = Snackbar.make(
                         view,
-                        "Siz «${contact.name}» kontakttin «$value» summasin oshirdiniz!",
+                        "Вы погасили сумму «$value» сумму для контакта «${contact.name}»!",
                         Snackbar.LENGTH_LONG
                     )
                     snackBar.setAction("Biykarlaw") {
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity(),
                     dialog.setTitle("Удаление контакта")
                     dialog.setMessage(
                         "Вы действительно хотите удалить контакт «${contact.name}»?" + "\n" + "\n" +
-                                "Это операция также удалит всю историю, связанную с выбранным контактом; удаление нельзя будет отменить"
+                                "Это операция также удалит всю историю, связанную с выбранным контактом; удаление нельзя будет отменить."
                                 + "\n" + "\n" + "С этим контактом связана сумма «${contact.summa}». Хотите все равно удалить?"
                     )
                     dialog.setPositiveButton("УДАЛИТЬ") { _, _ ->

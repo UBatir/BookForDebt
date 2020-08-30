@@ -46,21 +46,13 @@ class CalculatorDialog(context: Context, private val listener: SetData): Dialog(
             result_text.text = ""
         }
         btn_result.setOnClickListener{
-            try {
-                val  ex = ExpressionBuilder(math_operation.text.toString()).build()
-                val result = ex.evaluate()
-                val longRes = result.toLong()
-                if(result == longRes.toDouble())
-                    sum = longRes
-                else
-                    sum = result.toLong()
-            }catch (e: Exception){}
-            result_text.text=sum.toString()
+            count()
         }
         btnNegative.setOnClickListener {
             dismiss()
         }
         btnPositive.setOnClickListener {
+            count()
             listener.setSum(sum)
             dismiss()
         }
@@ -71,6 +63,19 @@ class CalculatorDialog(context: Context, private val listener: SetData): Dialog(
             result_text.text = ""
         }
         math_operation.append(str)
+    }
+
+    private fun count(){
+        try {
+            val  ex = ExpressionBuilder(math_operation.text.toString()).build()
+            val result = ex.evaluate()
+            val longRes = result.toLong()
+            if(result == longRes.toDouble())
+                sum = longRes
+            else
+                sum = result.toLong()
+        }catch (e: Exception){}
+        result_text.text=sum.toString()
     }
 }
 
