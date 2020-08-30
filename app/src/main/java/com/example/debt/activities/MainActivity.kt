@@ -183,10 +183,7 @@ class MainActivity : AppCompatActivity(),
                 }
                 R.id.itemChangeBalance -> {
                     val dialog =
-                        DialogChangeBalance(
-                            this,
-                            id
-                        )
+                        DialogChangeBalance(this, id)
                     dialog.show()
                 }
                 R.id.itemRename -> {

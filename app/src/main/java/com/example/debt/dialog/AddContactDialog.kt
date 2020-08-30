@@ -27,7 +27,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
     private val db=FirebaseFirestore.getInstance()
     private val mAuth=FirebaseAuth.getInstance()
-    lateinit var currentContact:Contact
+    var currentContact = Contact()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {

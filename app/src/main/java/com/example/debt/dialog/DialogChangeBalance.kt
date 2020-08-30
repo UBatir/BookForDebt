@@ -11,13 +11,17 @@ import com.example.debt.R
 import com.example.debt.data.Contact
 import com.example.debt.activities.MainActivity
 import com.example.debt.interfaces.SetData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_add_contact.etSumma
 import kotlinx.android.synthetic.main.dialog_add_contact.tvSane
 import kotlinx.android.synthetic.main.dialog_change_balance.*
 import java.util.*
 
-class DialogChangeBalance(private val activity: MainActivity, private val id: String): Dialog(activity),
+class DialogChangeBalance(private val activity: MainActivity, val id: String): Dialog(activity),
     SetData {
+    private  val mAuth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     lateinit var currentContact: Contact
 
@@ -25,8 +29,10 @@ class DialogChangeBalance(private val activity: MainActivity, private val id: St
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_change_balance)
-        tvName.text=currentContact.name
-        tvSumma.text=currentContact.summa.toString()
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {
+            tvName.text= it.get("name").toString()
+            tvSumma.text=it.get("summa").toString()
+        }
         val c= Calendar.getInstance()
         val year=c.get(Calendar.YEAR)
         val month=c.get(Calendar.MONTH)
