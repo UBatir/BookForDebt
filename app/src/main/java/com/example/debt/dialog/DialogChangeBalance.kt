@@ -23,7 +23,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
     private  val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
-    lateinit var currentContact: Contact
+    private var currentContact = Contact()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +64,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                 val a=if (etSumma.text.toString().trim() == "") 0 else etSumma.text.toString().toLong()
                 if(currentContact.debt==1){
                     tvPlusText.setTextColor(Color.rgb(76,175,80))
-                    tvPlusText.text = "+${currentContact.summa+ a}"
+                    tvPlusText.text = "+${currentContact.summa + a}"
                     when {
                         currentContact.summa.toInt()- a>0 -> {
                             tvMinusText.setTextColor(Color.rgb(76,175,80))
@@ -141,7 +141,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                     }
                 }
 
-                currentContact.summa=tvPlusText.text.toString()
+                currentContact.summa=tvPlusText.text.toString().toLong()
                 dismiss()
             }
         }
@@ -183,7 +183,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                         }
                     }
                 }
-                currentContact.summa=tvMinusText.text.toString()
+                currentContact.summa=tvMinusText.text.toString().toLong()
                 dismiss()
             }
         }

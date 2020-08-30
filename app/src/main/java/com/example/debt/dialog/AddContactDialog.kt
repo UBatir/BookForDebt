@@ -100,7 +100,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             val map: MutableMap<String, Any> = mutableMapOf()
             map["name"] = actvName.text.toString()
             map["comment"] = etKommentariy.text.toString()
-            map["summa"] = etSumma.text.toString()
+            map["summa"] = etSumma.text.toString().toLong()
             map["date"] = tvSane.text.toString()
             map["debt"]=debt
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
