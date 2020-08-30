@@ -154,65 +154,81 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun onOptionsButtonClick(view: View, contact: Contact, id: String){
-        val optionsMenu=PopupMenu(this, view)
-        val menuInflater=optionsMenu.menuInflater
-        menuInflater.inflate(R.menu.menu_item_options, optionsMenu.menu)
-        optionsMenu.setOnMenuItemClickListener {
-            when(it.itemId){
-                R.id.itemAmount -> {
-                    val value = contact.summa
-                    contact.summa.toInt()
-                    contact.debt = -1
-                    val snackBar = Snackbar.make(
-                        view,
-                        "Вы погасили сумму «$value» сумму для контакта «${contact.name}»!",
-                        Snackbar.LENGTH_LONG
-                    )
-                    snackBar.setAction("Biykarlaw") {
-                        if (value.toInt() > 0) {
-                            contact.summa = value
-                            contact.debt = 1
-                        } else {
-                            contact.summa = value
-                            contact.debt = 0
-                        }
-                        snackBar.dismiss()
-                    }
-                    snackBar.setActionTextColor(Color.rgb(253, 216, 53))
-                    snackBar.show()
-                }
-                R.id.itemChangeBalance -> {
-                    val dialog =
-                        DialogChangeBalance(this, id)
-                    dialog.show()
-                }
-                R.id.itemRename -> {
-                    val dialog =
-                        DialogRename(
-                            id,
-                            this
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {doc->
+            val optionsMenu=PopupMenu(this, view)
+            val menuInflater=optionsMenu.menuInflater
+            menuInflater.inflate(R.menu.menu_item_options, optionsMenu.menu)
+            contact.summa=doc.get("summa").toString().toLong()
+            contact.debt=doc.get("debt").toString().toInt()
+            optionsMenu.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.itemAmount -> {
+                        val value = contact.summa
+                        contact.summa=0
+                        contact.debt = -1
+                        updateSum(contact, id)
+                        val snackBar = Snackbar.make(
+                            view,
+                            "Вы погасили сумму «$value» сумму для контакта «${contact.name}»!",
+                            Snackbar.LENGTH_LONG
                         )
-                    dialog.show()
-                }
-                R.id.itemDelete -> {
-                    val dialog = AlertDialog.Builder(this)
-                    dialog.setTitle("Удаление контакта")
-                    dialog.setMessage(
-                        "Вы действительно хотите удалить контакт «${contact.name}»?" + "\n" + "\n" +
-                                "Это операция также удалит всю историю, связанную с выбранным контактом; удаление нельзя будет отменить."
-                                + "\n" + "\n" + "С этим контактом связана сумма «${contact.summa}». Хотите все равно удалить?"
-                    )
-                    dialog.setPositiveButton("УДАЛИТЬ") { _, _ ->
-                        deleteData(id)
+                        snackBar.setAction("ОТМЕНА") {
+                            if (value.toInt() > 0) {
+                                contact.summa = value
+                                contact.debt = 1
+                                updateSum(contact, id)
+                            } else {
+                                contact.summa = value
+                                contact.debt = 0
+                                updateSum(contact, id)
+                            }
+                            snackBar.dismiss()
+                        }
+                        snackBar.setActionTextColor(Color.rgb(253, 216, 53))
+                        snackBar.show()
                     }
-                    dialog.setNegativeButton("ОТМЕНА") { _, _ ->
+                    R.id.itemChangeBalance -> {
+                        val dialog =
+                            DialogChangeBalance(this, id)
+                        dialog.show()
                     }
-                    dialog.show()
+                    R.id.itemRename -> {
+                        val dialog =
+                            DialogRename(
+                                id,
+                                this
+                            )
+                        dialog.show()
+                    }
+                    R.id.itemDelete -> {
+                        val dialog = AlertDialog.Builder(this)
+                        dialog.setTitle("Удаление контакта")
+                        dialog.setMessage(
+                            "Вы действительно хотите удалить контакт «${contact.name}»?" + "\n" + "\n" +
+                                    "Это операция также удалит всю историю, связанную с выбранным контактом; удаление нельзя будет отменить."
+                                    + "\n" + "\n" + "С этим контактом связана сумма «${contact.summa}». Хотите все равно удалить?"
+                        )
+                        dialog.setPositiveButton("УДАЛИТЬ") { _, _ ->
+                            deleteData(id)
+                        }
+                        dialog.setNegativeButton("ОТМЕНА") { _, _ ->
+                        }
+                        dialog.show()
+                    }
                 }
+                return@setOnMenuItemClickListener true
             }
-            return@setOnMenuItemClickListener true
+            optionsMenu.show()
         }
-        optionsMenu.show()
+    }
+
+    private fun updateSum(contact: Contact, id: String){
+        val update= hashMapOf<String,Any>(
+            "summa" to contact.summa,
+            "debt" to contact.debt
+        )
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
+
     }
 
     override fun onContactItemClick(id: String) {

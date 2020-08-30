@@ -28,6 +28,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     private val db=FirebaseFirestore.getInstance()
     private val mAuth=FirebaseAuth.getInstance()
     var currentContact = Contact()
+    var summa:Long=0
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,19 +58,6 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         val month=c.get(Calendar.MONTH)
         val day=c.get(Calendar.DAY_OF_MONTH)
         tvSane.text="$day.${month+1}.$year"
-        btnPayda.setOnClickListener {
-            if(actvName.text.toString() == ""){
-                Toast.makeText(context, "Ati kirgizilmegen, qosatin esset joq!", Toast.LENGTH_SHORT).show()
-            } else if(etSumma.text.toString()==""||etSumma.text.toString().toLong().toInt()==0){
-                Toast.makeText(
-                    context,
-                    "Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else{
-                dismiss()
-            }
-        }
 
         btnBiykarlaw.setOnClickListener {
             dismiss()
@@ -86,21 +74,25 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
 
         btnPayda.setOnClickListener {
             currentContact.debt=1
-            addContact(currentContact.debt)
+            summa= etSumma.text.toString().toLong()
+            addContact(currentContact.debt,summa)
+            dismiss()
         }
 
         btnQariz.setOnClickListener {
             currentContact.debt=0
-            addContact(currentContact.debt)
+            summa=-etSumma.text.toString().toLong()
+            addContact(currentContact.debt,summa)
+            dismiss()
         }
     }
 
-    fun addContact(debt:Int){
+    fun addContact(debt:Int,summa: Long){
         if (actvName.text.isNotEmpty() && etSumma.text!!.isNotEmpty()){
             val map: MutableMap<String, Any> = mutableMapOf()
             map["name"] = actvName.text.toString()
             map["comment"] = etKommentariy.text.toString()
-            map["summa"] = etSumma.text.toString().toLong()
+            map["summa"] = summa
             map["date"] = tvSane.text.toString()
             map["debt"]=debt
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
