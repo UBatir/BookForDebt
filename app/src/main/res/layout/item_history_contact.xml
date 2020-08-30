@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLength="18"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvSumma"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Adamnin ati"
                 android:layout_marginStart="@dimen/margin_standard"
@@ -33,26 +33,47 @@
                 android:textColor="#DE000000"/>
 
             <TextView
-                android:id="@+id/tvKommentariy"
+                android:id="@+id/tvData"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
+                android:text="30.08.2020"
                 app:layout_constraintTop_toBottomOf="@id/tvName"
-                android:text="Kommentariy"
                 android:layout_marginStart="@dimen/margin_standard" />
+
+            <TextView
+                android:id="@+id/tvComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/tvTimeHistory"
+                app:layout_constraintTop_toTopOf="@id/tvData"
+                app:layout_constraintBottom_toBottomOf="@id/tvData"
+                android:text="Comment"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/tvTimeHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="23:30"
+                app:layout_constraintTop_toTopOf="@id/tvData"
+                app:layout_constraintBottom_toBottomOf="@id/tvData"
+                app:layout_constraintStart_toEndOf="@id/tvData"/>
 
             <TextView
                 android:id="@+id/tvSumma"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btnOptions"
-                android:layout_marginEnd="@dimen/margin_standard"
+                app:layout_constraintTop_toTopOf="@id/tvName"
+                app:layout_constraintBottom_toBottomOf="@id/tvName"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="8dp"
                 android:text="100"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
 
             <ImageView
                 android:id="@+id/btnOptions"

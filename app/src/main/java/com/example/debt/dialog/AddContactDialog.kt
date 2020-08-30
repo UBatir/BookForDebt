@@ -96,6 +96,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             map["date"] = tvSane.text.toString()
             map["debt"]=debt
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(map)
             .addOnSuccessListener {
                 Toast.makeText(context, "Было добавлено", Toast.LENGTH_SHORT).show()
             }

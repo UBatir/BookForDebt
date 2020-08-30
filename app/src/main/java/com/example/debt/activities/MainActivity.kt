@@ -1,6 +1,7 @@
 package com.example.debt.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.debt.R
+import com.example.debt.adapters.HistoryAdapter
 import com.example.debt.adapters.ListAdapter
 import com.example.debt.data.Contact
 import com.example.debt.dialog.AddContactDialog
@@ -49,8 +51,8 @@ class MainActivity : AppCompatActivity(),
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         recyclerView.adapter=adapter
-        totalSum()
         getData()
+        totalSum()
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             val dialog=
@@ -74,7 +76,8 @@ class MainActivity : AppCompatActivity(),
                     dialog.show()
                 }
                 R.id.nav_tariyx -> {
-
+                    val intent = Intent(this, HistoryActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.nav_rezerv -> {
 

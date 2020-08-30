@@ -16,6 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_add_contact.etSumma
 import kotlinx.android.synthetic.main.dialog_add_contact.tvSane
 import kotlinx.android.synthetic.main.dialog_change_balance.*
+import kotlinx.android.synthetic.main.dialog_change_balance.tvName
+import kotlinx.android.synthetic.main.dialog_change_balance.tvSumma
+import kotlinx.android.synthetic.main.item_contact.*
+import kotlinx.android.synthetic.main.item_history_contact.*
 import java.util.*
 
 class DialogChangeBalance(private val activity: MainActivity, val id: String): Dialog(activity),
@@ -29,12 +33,13 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_change_balance)
 
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {
-
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get()
+            .addOnSuccessListener {
             tvName.text= it.get("name").toString()
             tvSumma.text=it.get("summa").toString()
             currentContact.debt=it.get("debt").toString().toInt()
             currentContact.summa=it.get("summa").toString().toLong()
+                currentContact.comment = it.get("comment").toString()
             val c= Calendar.getInstance()
             val year=c.get(Calendar.YEAR)
             val month=c.get(Calendar.MONTH)
@@ -144,9 +149,19 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                         }
                     }
                     val update= hashMapOf<String,Any>(
-                        "summa" to tvPlusText.text.toString().toLong()
+                        "summa" to tvPlusText.text.toString().toLong(),
+                        "comment" to etKommentariy.text.toString()
+
+                    )
+                    val updates= hashMapOf<String,Any>(
+                        "summa" to a,
+                        "name" to tvName.text.toString(),
+                        "debt" to currentContact.debt,
+                        "date" to tvSane.text.toString(),
+                        "comment" to etKommentariy.text.toString()
                     )
                     db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
+                    db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
                     dismiss()
                 }
             }
@@ -189,8 +204,19 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                         }
                     }
                     val update= hashMapOf<String,Any>(
-                        "summa" to tvPlusText.text.toString().toLong()
+                        "summa" to tvMinusText.text.toString().toLong(),
+                        "comment" to etKommentariy.text.toString()
+
                     )
+
+                    val updates= hashMapOf<String,Any>(
+                        "summa" to a,
+                        "name" to tvName.text.toString(),
+                        "debt" to currentContact.debt,
+                        "date" to tvSane.text.toString(),
+                        "comment" to etKommentariy.text.toString()
+                    )
+                    db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
                     db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
                     dismiss()
                 }

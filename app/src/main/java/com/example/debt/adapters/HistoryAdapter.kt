@@ -7,21 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.debt.R
+import com.example.debt.activities.HistoryActivity
 import com.example.debt.activities.MainActivity
 import com.example.debt.data.Contact
 import com.example.debt.interfaces.ContactItemClickListener
 import kotlinx.android.synthetic.main.dialog_change_balance.view.tvSumma
 import kotlinx.android.synthetic.main.item_contact.view.*
+import kotlinx.android.synthetic.main.item_contact.view.btnOptions
+import kotlinx.android.synthetic.main.item_contact.view.tvName
+import kotlinx.android.synthetic.main.item_history_contact.view.*
 
-class ListAdapter(private val activity: MainActivity, private val listener: ContactItemClickListener):
-    RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
+class HistoryAdapter(private val activity: HistoryActivity):
+    RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
 
-    inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class HistoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         @SuppressLint("SetTextI18n")
-        fun populateModel(model: Contact, activity: MainActivity){
+        fun populateModel(model: Contact, activity: HistoryActivity){
             itemView.tvName.text=model.name
-            itemView.tvKommentariy.text=model.comment
+            itemView.tvComment.text = model.comment
+            itemView.tvData.text = model.date
+            itemView.tvTimeHistory.text = " добавьте время пацаны"
             itemView.btnOptions.setOnClickListener{
                 activity.onOptionsButtonClick(itemView.btnOptions,model,model.id)
             }
@@ -40,9 +46,6 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
                 }
             }
 
-            itemView.setOnClickListener {
-                listener.onContactItemClick(model.id)
-            }
         }
     }
 
@@ -52,15 +55,14 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view= LayoutInflater.from(parent.context).inflate(R.layout.item_contact,parent,false)
-        return ListViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+        val view= LayoutInflater.from(parent.context).inflate(R.layout.item_history_contact,parent,false)
+        return HistoryViewHolder(view)
     }
 
     override fun getItemCount()=models.size
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         holder.populateModel(models[position],activity)
     }
-
 }
