@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(),
     private val adapter= ListAdapter(this, this)
     private val db=FirebaseFirestore.getInstance()
     private val mAuth=FirebaseAuth.getInstance()
-    private var docId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,7 +112,6 @@ class MainActivity : AppCompatActivity(),
                           it.documents.forEach {doc ->
                               val model = doc.toObject(Contact::class.java)
                               model?.id = doc.id
-                              docId = doc.id
                               model?.let {
                                   result.add(model)
                               }
@@ -124,8 +122,8 @@ class MainActivity : AppCompatActivity(),
         }
 
 
-    private fun deleteData(){
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(docId)
+    private fun deleteData(id: String){
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id)
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()
@@ -201,16 +199,16 @@ class MainActivity : AppCompatActivity(),
                 }
                 R.id.itemDelete -> {
                     val dialog = AlertDialog.Builder(this)
-                    dialog.setTitle("Oshiriw")
+                    dialog.setTitle("Удаление контакта")
                     dialog.setMessage(
-                        "Rasinda da «${contact.name}» kontaktti joq qilajaqsizba?" + "\n" + "\n" +
-                                "Bul amel tanlag'an kontakt penen baylanisli barliq informaciyani oshirip taslaydi, buni biykarlap bolmaydi."
-                                + "\n" + "\n" + "«${contact.summa}» mug'dari usi kontakt penen baylanisli. Eleda dawam etpekshisizba?"
+                        "Вы действительно хотите удалить контакт «${contact.name}»?" + "\n" + "\n" +
+                                "Это операция также удалит всю историю, связанную с выбранным контактом; удаление нельзя будет отменить"
+                                + "\n" + "\n" + "С этим контактом связана сумма «${contact.summa}». Хотите все равно удалить?"
                     )
-                    dialog.setPositiveButton("Oshiriw") { _, _ ->
-                        deleteData()
+                    dialog.setPositiveButton("УДАЛИТЬ") { _, _ ->
+                        deleteData(id)
                     }
-                    dialog.setNegativeButton("Biykarlaw") { _, _ ->
+                    dialog.setNegativeButton("ОТМЕНА") { _, _ ->
                     }
                     dialog.show()
                 }
