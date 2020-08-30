@@ -6,19 +6,30 @@ import android.provider.ContactsContract
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.SimpleAdapter
+import android.widget.Toast
 import com.example.debt.R
 import com.example.debt.data.Contact
 import com.example.debt.activities.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.dialog_add_contact.*
+import kotlinx.android.synthetic.main.dialog_change_balance.*
+import kotlinx.android.synthetic.main.dialog_change_balance.etKommentariy
+import kotlinx.android.synthetic.main.dialog_change_balance.etSumma
+import kotlinx.android.synthetic.main.dialog_change_balance.tvSane
 import kotlinx.android.synthetic.main.dialog_rename.*
+import kotlinx.android.synthetic.main.dialog_rename.btnBiykarlaw
 import java.util.ArrayList
 import java.util.HashMap
 
 class DialogRename(private val id: String, private val activity: MainActivity): Dialog(activity) {
 
-    lateinit var currentContact: Contact
+    private var currentContact = Contact()
     private lateinit var mPeopleList: ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
+    private val db= FirebaseFirestore.getInstance()
+    private val mAuth= FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +50,23 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
                 mTxtPhoneNo.setSelection(mTxtPhoneNo.text!!.length)
             }
 
-        actvRename.setText(currentContact.name)
-        actvRename.setSelection(actvRename.text.length)
-        tvRename.text = currentContact.name
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {
+            actvRename.setText(it.get("name").toString())
+            actvRename.setSelection(actvRename.text.length)
+            tvRename.text = it.get("name").toString()
+        }
+
         btnAtinOzgertiw.setOnClickListener {
-            currentContact.name=actvRename.text.toString()
+            //currentContact.name=actvRename.text.toString()
+            val docRef = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id)
+                val updates = hashMapOf<String, Any>(
+                    "name" to actvRename.text.toString()
+                )
+                docRef.update(updates).addOnSuccessListener {
+                    Toast.makeText(context, "Было изменено", Toast.LENGTH_SHORT).show()
+                }
+
+
             dismiss()
         }
         btnBiykarlaw.setOnClickListener {
