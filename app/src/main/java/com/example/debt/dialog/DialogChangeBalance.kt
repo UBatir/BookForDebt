@@ -150,8 +150,8 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                     }
                     val update= hashMapOf<String,Any>(
                         "summa" to tvPlusText.text.toString().toLong(),
-                        "comment" to etKommentariy.text.toString()
-
+                        "comment" to etKommentariy.text.toString(),
+                        "debt" to currentContact.debt
                     )
                     val updates= hashMapOf<String,Any>(
                         "summa" to a,
@@ -205,7 +205,8 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                     }
                     val update= hashMapOf<String,Any>(
                         "summa" to tvMinusText.text.toString().toLong(),
-                        "comment" to etKommentariy.text.toString()
+                        "comment" to etKommentariy.text.toString(),
+                        "debt" to currentContact.debt
 
                     )
 
