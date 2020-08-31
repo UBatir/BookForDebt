@@ -1,5 +1,6 @@
 package com.example.debt.activities
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -70,7 +71,14 @@ class HistoryActivity : AppCompatActivity(){
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            android.R.id.home->finish()
+            android.R.id.home->{
+                val intent = Intent(
+                    this,
+                    MainActivity::class.java
+                )
+                startActivity(intent)
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -80,8 +88,6 @@ class HistoryActivity : AppCompatActivity(){
             val optionsMenu= PopupMenu(this, view)
             val menuInflater=optionsMenu.menuInflater
             menuInflater.inflate(R.menu.menu_history_options, optionsMenu.menu)
-            contact.summa=doc.get("summa").toString().toLong()
-            contact.debt=doc.get("debt").toString().toInt()
             optionsMenu.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.item_delete -> {
@@ -106,7 +112,7 @@ class HistoryActivity : AppCompatActivity(){
         }
     }
     private fun deleteData(id: String){
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id)
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id)
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()

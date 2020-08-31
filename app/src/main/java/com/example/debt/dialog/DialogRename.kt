@@ -59,26 +59,25 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
             val date=it.get("date").toString()
             val comment=it.get("comment").toString()
 
-        btnAtinOzgertiw.setOnClickListener {
+            btnAtinOzgertiw.setOnClickListener {
                 val update = hashMapOf<String, Any>(
                     "name" to actvRename.text.toString()
                 )
-            val updates = hashMapOf<String, Any>(
-                "name" to actvRename.text.toString(),
-                "summa" to summa,
-                "debt" to debt,
-                "date" to date,
-                "comment" to comment
-            )
-            db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
-            db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
+                val updates = hashMapOf<String, Any>(
+                    "name" to actvRename.text.toString(),
+                    "summa" to summa,
+                    "debt" to debt,
+                    "date" to date,
+                    "comment" to comment
+                )
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
 
-
-            dismiss()
-        }
-        btnBiykarlaw.setOnClickListener {
-            dismiss()
-        }}
+                dismiss()
+            }
+            btnBiykarlaw.setOnClickListener {
+                dismiss()
+            }}
     }
     private fun populatePeopleList() {
         mPeopleList.clear()

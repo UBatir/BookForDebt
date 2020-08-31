@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -195,6 +196,20 @@ class MainActivity : AppCompatActivity(),
                             DialogChangeBalance(this, id)
                         dialog.show()
                     }
+                    R.id.itemCleanHistory -> {
+                        val dialog = AlertDialog.Builder(this)
+                        dialog.setTitle("Очистить историю")
+                        dialog.setMessage(
+                            "Вы действительно хотите очистить историю операций для контакта «${contact.name}»?" + "\n" + "\n" +
+                                    "Это операция также удалит всю историю, связанную с выбранным контактом"
+                        )
+                        dialog.setPositiveButton("Очистить") { _, _ ->
+                            cleanHistory(id)
+                        }
+                        dialog.setNegativeButton("ОТМЕНА") { _, _ ->
+                        }
+                        dialog.show()
+                    }
                     R.id.itemRename -> {
                         val dialog =
                             DialogRename(
@@ -202,6 +217,11 @@ class MainActivity : AppCompatActivity(),
                                 this
                             )
                         dialog.show()
+                    }
+                    R.id.itemHistory ->{
+                        val intent = Intent(this, HistoryActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }
                     R.id.itemDelete -> {
                         val dialog = AlertDialog.Builder(this)
@@ -223,6 +243,18 @@ class MainActivity : AppCompatActivity(),
             }
             optionsMenu.show()
         }
+    }
+    private fun cleanHistory(id: String){
+        val update= hashMapOf<String,Any>(
+            "summa" to FieldValue.delete(),
+            "debt" to FieldValue.delete(),
+            "name" to FieldValue.delete()
+        )
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id).update(update)
+            .addOnSuccessListener {
+                Toast.makeText(this, "История была очищена", Toast.LENGTH_SHORT).show()
+            }
+
     }
 
     private fun updateSum(contact: Contact, id: String){
