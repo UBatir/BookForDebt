@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
         recyclerView.adapter=adapter
         getData()
-        totalSum()
+        timer.start()
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             val dialog=
@@ -121,6 +122,7 @@ class MainActivity : AppCompatActivity(),
                               }
                           }
                           adapter.models = result
+                          timer.start()
                       }
                 }
         }
@@ -132,6 +134,7 @@ class MainActivity : AppCompatActivity(),
             .addOnSuccessListener {
                 Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()
             }
+        timer.start()
     }
 
 
@@ -147,7 +150,6 @@ class MainActivity : AppCompatActivity(),
                 tvTotalSum.text="+$sum"
             }
             sum==0 -> {
-                totalSum()
                 tvTotalSum.setTextColor(Color.rgb(209, 209, 209))
                 tvTotalSum.text=sum.toString()
             }
@@ -286,6 +288,16 @@ class MainActivity : AppCompatActivity(),
         if(requestCode==123){
             if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             }
+        }
+    }
+
+    private val timer = object : CountDownTimer(3000 , 1000){
+
+        override fun onTick(p0: Long) {
+
+        }
+        override fun onFinish() {
+            totalSum()
         }
     }
 
