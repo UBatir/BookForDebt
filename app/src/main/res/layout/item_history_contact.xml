@@ -20,12 +20,14 @@
 
             <TextView
                 android:id="@+id/tvName"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:maxLength="18"
                 app:layout_constraintStart_toEndOf="@id/tvSumma"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Adamnin ati"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_standard"
                 android:textStyle="bold"
@@ -43,12 +45,16 @@
 
             <TextView
                 android:id="@+id/tvComment"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/tvTimeHistory"
                 app:layout_constraintTop_toTopOf="@id/tvData"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/margin_standard"
                 app:layout_constraintBottom_toBottomOf="@id/tvData"
                 android:text="Comment"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_marginStart="8dp"/>
 
             <TextView
@@ -71,6 +77,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginEnd="8dp"
                 android:text="100"
+                android:maxLength="14"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

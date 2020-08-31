@@ -147,6 +147,7 @@ class MainActivity : AppCompatActivity(),
                 tvTotalSum.text="+$sum"
             }
             sum==0 -> {
+                totalSum()
                 tvTotalSum.setTextColor(Color.rgb(209, 209, 209))
                 tvTotalSum.text=sum.toString()
             }
@@ -211,6 +212,7 @@ class MainActivity : AppCompatActivity(),
                         dialog.show()
                     }
                     R.id.itemRename -> {
+                        totalSum()
                         val dialog =
                             DialogRename(
                                 id,
