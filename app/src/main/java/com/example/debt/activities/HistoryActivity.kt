@@ -18,10 +18,13 @@ import com.example.debt.dialog.DialogRename
 import com.example.debt.interfaces.ContactItemClickListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.app_bar_history.*
 import kotlinx.android.synthetic.main.content_history.*
+import kotlinx.android.synthetic.main.dialog_add_contact.*
 
 class HistoryActivity : AppCompatActivity(){
 
@@ -54,7 +57,10 @@ class HistoryActivity : AppCompatActivity(){
                     return@addSnapshotListener
                 }
                 result.clear()
-                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").get()
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                val a = intent.getStringExtra("key")
+                val query : Query = idsRef.whereEqualTo("name", a)
+                query.get()
                     .addOnSuccessListener {
                         it.documents.forEach {doc ->
                             val model = doc.toObject(Contact::class.java)

@@ -6,21 +6,18 @@ import android.provider.ContactsContract
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.SimpleAdapter
-import android.widget.Toast
 import com.example.debt.R
-import com.example.debt.data.Contact
 import com.example.debt.activities.MainActivity
+import com.example.debt.data.Contact
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.dialog_add_contact.*
-import kotlinx.android.synthetic.main.dialog_change_balance.*
-import kotlinx.android.synthetic.main.dialog_change_balance.etKommentariy
-import kotlinx.android.synthetic.main.dialog_change_balance.etSumma
-import kotlinx.android.synthetic.main.dialog_change_balance.tvSane
 import kotlinx.android.synthetic.main.dialog_rename.*
 import kotlinx.android.synthetic.main.dialog_rename.btnBiykarlaw
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
+
 
 class DialogRename(private val id: String, private val activity: MainActivity): Dialog(activity) {
 
@@ -72,6 +69,11 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
                 )
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
+
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                // val query: Query = idsRef.orderBy("name", Query.Direction.ASCENDING)
+                val query : Query = idsRef.
+                query.get()
 
                 dismiss()
             }

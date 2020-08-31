@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.item_contact.*
 
 
 class MainActivity : AppCompatActivity(),
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(),
         recyclerView.adapter=adapter
         getData()
         timer.start()
+        totalSum()
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             val dialog=
@@ -99,6 +101,15 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    private val timer = object : CountDownTimer(100 , 1000){
+
+        override fun onTick(p0: Long) {
+
+        }
+        override fun onFinish() {
+            totalSum()
+        }
+    }
     private fun getData(){
         val result: MutableList<Contact> = mutableListOf()
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
@@ -224,6 +235,7 @@ class MainActivity : AppCompatActivity(),
                     }
                     R.id.itemHistory ->{
                         val intent = Intent(this, HistoryActivity::class.java)
+                        intent.putExtra("key", doc.get("name").toString())
                         startActivity(intent)
                         finish()
                     }
@@ -291,14 +303,5 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private val timer = object : CountDownTimer(3000 , 1000){
-
-        override fun onTick(p0: Long) {
-
-        }
-        override fun onFinish() {
-            totalSum()
-        }
-    }
 
 }
