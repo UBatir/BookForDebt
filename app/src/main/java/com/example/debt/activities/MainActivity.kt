@@ -226,7 +226,7 @@ class MainActivity : AppCompatActivity(),
                                     "Это операция также удалит всю историю, связанную с выбранным контактом"
                         )
                         dialog.setPositiveButton("Очистить") { _, _ ->
-                            cleanHistory(id)
+                            cleanHistory()
                         }
                         dialog.setNegativeButton("ОТМЕНА") { _, _ ->
                         }
@@ -265,16 +265,8 @@ class MainActivity : AppCompatActivity(),
             optionsMenu.show()
         }
     }
-    private fun cleanHistory(id: String){
-        val update= hashMapOf<String,Any>(
-            "summa" to FieldValue.delete(),
-            "debt" to FieldValue.delete(),
-            "name" to FieldValue.delete()
-        )
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id).update(update)
-            .addOnSuccessListener {
-                Toast.makeText(this, "История была очищена", Toast.LENGTH_SHORT).show()
-            }
+    private fun cleanHistory(){
+
 
     }
 

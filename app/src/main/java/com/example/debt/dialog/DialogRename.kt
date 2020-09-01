@@ -11,11 +11,10 @@ import com.example.debt.activities.MainActivity
 import com.example.debt.data.Contact
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.android.synthetic.main.dialog_add_contact.*
 import kotlinx.android.synthetic.main.dialog_rename.*
-import kotlinx.android.synthetic.main.dialog_rename.btnBiykarlaw
 import java.util.*
 
 
@@ -51,30 +50,23 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
             actvRename.setText(it.get("name").toString())
             actvRename.setSelection(actvRename.text.length)
             tvRename.text = it.get("name").toString()
-            val summa=it.get("summa").toString().toLong()
-            val debt=it.get("debt").toString().toInt()
-            val date=it.get("date").toString()
-            val comment=it.get("comment").toString()
-
             btnAtinOzgertiw.setOnClickListener {
                 val update = hashMapOf<String, Any>(
                     "name" to actvRename.text.toString()
                 )
-                val updates = hashMapOf<String, Any>(
-                    "name" to actvRename.text.toString(),
-                    "summa" to summa,
-                    "debt" to debt,
-                    "date" to date,
-                    "comment" to comment
-                )
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
-                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
 
-//                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-//                // val query: Query = idsRef.orderBy("name", Query.Direction.ASCENDING)
-//                val query : Query = idsRef.
-//                query.get()
-
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                val query : Query = idsRef.whereEqualTo("name", tvRename.text.toString())
+                query.get()
+                    .addOnSuccessListener {i->
+                        i.documents.forEach { _ ->
+                            val updates = hashMapOf<String, Any>(
+                                "name" to actvRename.text.toString()
+                            )
+                            db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id).update(updates)
+                        }
+                    }
                 dismiss()
             }
             btnBiykarlaw.setOnClickListener {
