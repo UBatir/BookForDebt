@@ -70,10 +70,10 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
 
-                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-                // val query: Query = idsRef.orderBy("name", Query.Direction.ASCENDING)
-                val query : Query = idsRef.
-                query.get()
+//                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+//                // val query: Query = idsRef.orderBy("name", Query.Direction.ASCENDING)
+//                val query : Query = idsRef.
+//                query.get()
 
                 dismiss()
             }

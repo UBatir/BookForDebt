@@ -23,20 +23,24 @@ import com.example.debt.data.Contact
 import com.example.debt.dialog.AddContactDialog
 import com.example.debt.dialog.DialogChangeBalance
 import com.example.debt.dialog.DialogRename
+import com.example.debt.dialog.DialogSort
 import com.example.debt.interfaces.ContactItemClickListener
+import com.example.debt.interfaces.SortClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.item_contact.*
 
 
 class MainActivity : AppCompatActivity(),
-    ContactItemClickListener {
+    ContactItemClickListener, SortClickListener {
 
     private val adapter= ListAdapter(this, this)
     private val db=FirebaseFirestore.getInstance()
@@ -51,6 +55,10 @@ class MainActivity : AppCompatActivity(),
             arrayOf(android.Manifest.permission.READ_CONTACTS),
             123
         )
+        ivSort.setOnClickListener {
+            val dialog = DialogSort(this,this)
+            dialog.show()
+        }
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         recyclerView.adapter=adapter
@@ -227,10 +235,7 @@ class MainActivity : AppCompatActivity(),
                     R.id.itemRename -> {
                         totalSum()
                         val dialog =
-                            DialogRename(
-                                id,
-                                this
-                            )
+                            DialogRename(id, this)
                         dialog.show()
                     }
                     R.id.itemHistory ->{
@@ -301,6 +306,36 @@ class MainActivity : AppCompatActivity(),
             if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             }
         }
+    }
+
+    override fun onClickSort(key: String, direction: Query.Direction) {
+        val result: MutableList<Contact> = mutableListOf()
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Toast.makeText(
+                        applicationContext,
+                        error.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@addSnapshotListener
+                }
+                result.clear()
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
+                val query: Query = idsRef.orderBy(key,direction)
+                query.get()
+                    .addOnSuccessListener {
+                        it.documents.forEach {doc ->
+                            val model = doc.toObject(Contact::class.java)
+                            model?.id = doc.id
+                            model?.let {
+                                result.add(model)
+                            }
+                        }
+                        adapter.models = result
+                        timer.start()
+                    }
+            }
     }
 
 
