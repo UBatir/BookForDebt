@@ -62,35 +62,9 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
-                    app:layout_constraintEnd_toStartOf="@id/btnMore"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tvTotalSum"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="0"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    android:textColor="#fafafa"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:layout_marginEnd="@dimen/margin_standard"/>-->
-
-                <ImageView
-                    app:layout_constraintTop_toTopOf="@id/ivSort"
-                    android:id="@+id/btnMore"
-                    android:layout_width="40dp"
-                    app:layout_constraintBottom_toBottomOf="@id/ivSort"
-                    android:layout_height="40dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_baseline_more_vert_24"
                     app:layout_constraintEnd_toEndOf="parent"
-
-                    />
-
-
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

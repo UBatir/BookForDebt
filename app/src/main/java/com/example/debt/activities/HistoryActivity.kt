@@ -45,7 +45,7 @@ class HistoryActivity : AppCompatActivity(), SortClickListener {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         recyclerViewHistory.adapter=mAdapter
-        getDataToHistory()
+        getAllHistory()
         ivSort.setOnClickListener {
             val dialog = DialogSort(this,this)
             dialog.show()
@@ -149,6 +149,33 @@ class HistoryActivity : AppCompatActivity(), SortClickListener {
                 val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
                 val query: Query = idsRef.orderBy(key,direction)
                 query.get()
+                    .addOnSuccessListener {
+                        it.documents.forEach {doc ->
+                            val model = doc.toObject(Contact::class.java)
+                            model?.id = doc.id
+                            model?.let {
+                                result.add(model)
+                            }
+                        }
+                        mAdapter.models = result
+                    }
+            }
+    }
+
+    fun getAllHistory() {
+        val result: MutableList<Contact> = mutableListOf()
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Toast.makeText(
+                        applicationContext,
+                        error.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@addSnapshotListener
+                }
+                result.clear()
+                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").get()
                     .addOnSuccessListener {
                         it.documents.forEach {doc ->
                             val model = doc.toObject(Contact::class.java)

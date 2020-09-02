@@ -275,6 +275,19 @@ class MainActivity : AppCompatActivity(),
                     et.reference.delete()
                 }
             }
+        val zeroSum = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
+        val queryZero: Query = zeroSum.whereEqualTo("name", tvName.text.toString())
+        queryZero.get()
+            .addOnSuccessListener { e->
+                val update= hashMapOf<String,Any>(
+                    "summa" to 0,
+                    "debt" to -1
+                )
+                e.documents.forEach{k->
+                    k.reference.update(update)
+                }
+
+            }
     }
 
     private fun updateSum(contact: Contact, id: String){
