@@ -36,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.dialog_rename.*
 import kotlinx.android.synthetic.main.item_contact.*
 
 
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        title = "Daptershe"
+        title = "Записи"
         ActivityCompat.requestPermissions(
             this,
             arrayOf(android.Manifest.permission.READ_CONTACTS),
@@ -266,8 +267,14 @@ class MainActivity : AppCompatActivity(),
         }
     }
     private fun cleanHistory(){
-
-
+        val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+        val query : Query = idsRef.whereEqualTo("name", tvName.text.toString())
+        query.get()
+            .addOnSuccessListener {i->
+                i.documents.forEach { et ->
+                    et.reference.delete()
+                }
+            }
     }
 
     private fun updateSum(contact: Contact, id: String){
@@ -276,7 +283,6 @@ class MainActivity : AppCompatActivity(),
             "debt" to contact.debt
         )
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
-
     }
 
     override fun onContactItemClick(id: String) {
@@ -329,6 +335,4 @@ class MainActivity : AppCompatActivity(),
                     }
             }
     }
-
-
 }

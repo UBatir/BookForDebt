@@ -50,8 +50,6 @@ class HistoryActivity : AppCompatActivity(), SortClickListener {
             val dialog = DialogSort(this,this)
             dialog.show()
         }
-
-
     }
 
     private fun getDataToHistory(){
@@ -163,6 +161,4 @@ class HistoryActivity : AppCompatActivity(), SortClickListener {
                     }
             }
     }
-
-
 }

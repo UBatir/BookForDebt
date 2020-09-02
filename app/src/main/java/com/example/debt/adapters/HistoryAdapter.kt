@@ -27,7 +27,7 @@ class HistoryAdapter(private val activity: HistoryActivity):
             itemView.tvName.text=model.name
             itemView.tvComment.text = model.comment
             itemView.tvData.text = model.date
-            itemView.tvTimeHistory.text = " 22:40"
+            itemView.tvTimeHistory.text = model.time
             itemView.btnOptions.setOnClickListener{
                 activity.onOptionsButtonClick(itemView.btnOptions,model,model.id)
             }

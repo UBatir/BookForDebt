@@ -29,6 +29,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     private val mAuth=FirebaseAuth.getInstance()
     var currentContact = Contact()
     var summa:Long=0
+    private var time: String=""
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +59,13 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         val month=c.get(Calendar.MONTH)
         val day=c.get(Calendar.DAY_OF_MONTH)
         tvSane.text="$day.${month+1}.$year"
+        val hour =c.get(Calendar.HOUR_OF_DAY)
+        val minute=c.get(Calendar.MINUTE)
+        time = if(minute<10){
+            "$hour:0$minute"
+        }else{
+            "$hour:$minute"
+        }
 
         btnBiykarlaw.setOnClickListener {
             dismiss()
@@ -95,6 +103,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             map["summa"] = summa
             map["date"] = tvSane.text.toString()
             map["debt"]=debt
+            map["time"]=time
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(map)
             .addOnSuccessListener {
@@ -132,8 +141,9 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         activity.startManagingCursor(people)
     }
 
-    override fun setData(data: String) {
+    override fun setData(data: String,time:String) {
         tvSane.text=data
+        this.time =time
     }
 
     override fun setSum(sum: Long) {

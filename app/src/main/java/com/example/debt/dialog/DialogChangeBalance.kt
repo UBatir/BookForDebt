@@ -27,6 +27,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
     private  val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private var currentContact = Contact()
+    private var time: String=""
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,13 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
             val month=c.get(Calendar.MONTH)
             val day=c.get(Calendar.DAY_OF_MONTH)
             tvSane.text="$day.${month+1}.$year"
+            val hour =c.get(Calendar.HOUR_OF_DAY)
+            val minute=c.get(Calendar.MINUTE)
+            time = if(minute<10){
+                "$hour:0$minute"
+            }else{
+                "$hour:$minute"
+            }
             tvSane.setOnClickListener{
                 val dialog= DataDialog(context, this)
                 dialog.show()
@@ -151,14 +159,16 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                     val update= hashMapOf<String,Any>(
                         "summa" to tvPlusText.text.toString().toLong(),
                         "comment" to etKommentariy.text.toString(),
-                        "debt" to currentContact.debt
+                        "debt" to currentContact.debt,
+                        "time" to time
                     )
                     val updates= hashMapOf<String,Any>(
                         "summa" to a,
                         "name" to tvName.text.toString(),
                         "debt" to currentContact.debt,
                         "date" to tvSane.text.toString(),
-                        "comment" to etKommentariy.text.toString()
+                        "comment" to etKommentariy.text.toString(),
+                        "time" to time
                     )
                     db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
                     db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)
@@ -206,14 +216,16 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                     val update= hashMapOf<String,Any>(
                         "summa" to tvMinusText.text.toString().toLong(),
                         "comment" to etKommentariy.text.toString(),
-                        "debt" to currentContact.debt
+                        "debt" to currentContact.debt,
+                        "time" to time
 
                     )
 
                     val updates= hashMapOf<String,Any>(
-                        "summa" to a,
+                        "summa" to -a,
                         "name" to tvName.text.toString(),
-                        "debt" to currentContact.debt,
+                        "debt" to 0,
+                        "time" to time,
                         "date" to tvSane.text.toString(),
                         "comment" to etKommentariy.text.toString()
                     )
@@ -233,8 +245,9 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
 
     }
 
-    override fun setData(data: String) {
+    override fun setData(data: String,time:String) {
         tvSane.text=data
+        this.time =time
     }
 
     override fun setSum(sum: Long) {

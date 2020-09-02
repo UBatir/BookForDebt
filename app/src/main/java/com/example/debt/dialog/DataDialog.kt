@@ -13,7 +13,7 @@ import java.util.*
 
 class DataDialog(context: Context, private val listener: SetData):Dialog(context) {
 
-    var c = Calendar.getInstance()
+    private var c = Calendar.getInstance()
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -21,14 +21,15 @@ class DataDialog(context: Context, private val listener: SetData):Dialog(context
         calendarView.setOnDateChangeListener{ _, year, month, dayOfMonth ->
             btnPositive.setOnClickListener {
                 val data ="$dayOfMonth.${month + 1}.$year"
-                listener.setData(data)
+                setInitialDateTime()
+                val time=tvTime.text.toString()
+                listener.setData(data,time)
                 dismiss()
             }
         }
         btnNegative.setOnClickListener {
             dismiss()
         }
-        setInitialDateTime()
         tvTime.setOnClickListener {
             setTime()
         }

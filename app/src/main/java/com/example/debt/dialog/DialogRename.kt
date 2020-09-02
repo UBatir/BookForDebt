@@ -60,11 +60,9 @@ class DialogRename(private val id: String, private val activity: MainActivity): 
                 val query : Query = idsRef.whereEqualTo("name", tvRename.text.toString())
                 query.get()
                     .addOnSuccessListener {i->
-                        i.documents.forEach { _ ->
-                            val updates = hashMapOf<String, Any>(
-                                "name" to actvRename.text.toString()
-                            )
-                            db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id).update(updates)
+                        i.documents.forEach { et ->
+                            et.reference.update(update)
+
                         }
                     }
                 dismiss()
