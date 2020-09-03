@@ -58,7 +58,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         val year=c.get(Calendar.YEAR)
         val month=c.get(Calendar.MONTH)
         val day=c.get(Calendar.DAY_OF_MONTH)
-        tvSane.text="$day.${month+1}.$year"
+        tvSane.text="$day${month+1}$year"
         val hour =c.get(Calendar.HOUR_OF_DAY)
         val minute=c.get(Calendar.MINUTE)
         time = if(minute<10){

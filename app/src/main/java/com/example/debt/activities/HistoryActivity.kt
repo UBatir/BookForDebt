@@ -249,7 +249,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
         }else if (key == "date" && direction == "DESCENDING"){
             a.sortByDescending {
-                it.date
+                it.date.toLong()
             }
         }else if (key == "name" && direction == "ASCENDING"){
             a.sortBy {
@@ -261,7 +261,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
         }else if (key == "date" && direction == "ASCENDING"){
             a.sortBy {
-                it.date
+                it.date.toLong()
             }
         }
         a.forEach { _ ->
