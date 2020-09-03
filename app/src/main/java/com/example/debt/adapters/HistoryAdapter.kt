@@ -49,7 +49,7 @@ class HistoryAdapter(private val activity: HistoryActivity):
         }
     }
 
-    var models: List<Contact> = listOf()
+    var models: MutableList<Contact> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()

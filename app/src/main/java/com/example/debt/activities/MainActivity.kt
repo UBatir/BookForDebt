@@ -319,33 +319,35 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onClickSort(key: String, direction: Query.Direction) {
-        val result: MutableList<Contact> = mutableListOf()
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Toast.makeText(
-                        applicationContext,
-                        error.message.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@addSnapshotListener
-                }
-                result.clear()
-                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
-                val query: Query = idsRef.orderBy(key,direction)
-                query.get()
-                    .addOnSuccessListener {
-                        it.documents.forEach {doc ->
-                            val model = doc.toObject(Contact::class.java)
-                            model?.id = doc.id
-                            model?.let {
-                                result.add(model)
-                            }
-                        }
-                        adapter.models = result
-                        timer.start()
-                    }
+    override fun onClickSort(key: String, direction: String) {
+        val a = adapter.models
+        if (key == "name" && direction == "DESCENDING"){
+            a.sortByDescending {
+                it.name
             }
+        }else if (key == "summa" && direction == "DESCENDING"){
+            a.sortByDescending {
+                it.summa
+            }
+        }else if (key == "date" && direction == "DESCENDING"){
+            a.sortByDescending {
+                it.date
+            }
+        }else if (key == "name" && direction == "ASCENDING"){
+            a.sortBy {
+                it.name
+            }
+        }else if (key == "summa" && direction == "ASCENDING"){
+            a.sortBy {
+                it.summa
+            }
+        }else if (key == "date" && direction == "ASCENDING"){
+            a.sortBy {
+                it.date
+            }
+        }
+        a.forEach { _ ->
+            adapter.models = a
+        }
     }
 }

@@ -31,7 +31,6 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
     private val mAuth= FirebaseAuth.getInstance()
     val resultName: MutableList<String> = mutableListOf()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
@@ -43,7 +42,6 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
         recyclerViewHistory.adapter=mAdapter
         val a = intent.getStringExtra("key")
             spinnerData()
-
         if (!a.isNullOrEmpty()){
             getDataToHistory()
         }else{
@@ -82,6 +80,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                                 resultName.add(name!!)
                             }
                         }
+                        resultName.add(0,"Все контакты")
                         spinner.adapter = adapter
                         spinner.onItemSelectedListener = this
                     }
@@ -169,36 +168,9 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
     }
 
-    override fun onClickSort(key: String, direction: Query.Direction) {
-        val result: MutableList<Contact> = mutableListOf()
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Toast.makeText(
-                        applicationContext,
-                        error.message.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@addSnapshotListener
-                }
-                result.clear()
-                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-                val query: Query = idsRef.orderBy(key,direction)
-                query.get()
-                    .addOnSuccessListener {
-                        it.documents.forEach {doc ->
-                            val model = doc.toObject(Contact::class.java)
-                            model?.id = doc.id
-                            model?.let {
-                                result.add(model)
-                            }
-                        }
-                        mAdapter.models = result
-                    }
-            }
-    }
 
-    fun getAllHistory() {
+
+    private fun getAllHistory() {
         val result: MutableList<Contact> = mutableListOf()
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
             .addSnapshotListener { value, error ->
@@ -230,33 +202,70 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-               val result: MutableList<Contact> = mutableListOf()
-               db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-                   .addSnapshotListener { value, error ->
-                       if (error != null) {
-                           Toast.makeText(
-                               applicationContext,
-                               error.message.toString(),
-                               Toast.LENGTH_LONG
-                           ).show()
-                           return@addSnapshotListener
-                       }
-                       result.clear()
-                       val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-                       val a = parent!!.getItemAtPosition(position).toString()
-                       val query : Query = idsRef.whereEqualTo("name", a)
-                       query.get()
-                           .addOnSuccessListener {
-                               it.documents.forEach {doc ->
-                                   val model = doc.toObject(Contact::class.java)
-                                   model?.id = doc.id
-                                   model?.let {
-                                       result.add(model)
-                                   }
-                               }
-                               mAdapter.models = result
-                           }
-                   }
-           }
+        if (parent!!.getItemAtPosition(position).toString() == "Все контакты") {
+            getAllHistory()
+        } else {
+            val result: MutableList<Contact> = mutableListOf()
+            db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Toast.makeText(
+                            applicationContext,
+                            error.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@addSnapshotListener
+                    }
+                    result.clear()
+                    val idsRef: CollectionReference =
+                        db.collection("contacts").document(mAuth.currentUser!!.uid)
+                            .collection("history")
+                    val a = parent.getItemAtPosition(position).toString()
+                    val query: Query = idsRef.whereEqualTo("name", a)
+                    query.get()
+                        .addOnSuccessListener {
+                            it.documents.forEach { doc ->
+                                val model = doc.toObject(Contact::class.java)
+                                model?.id = doc.id
+                                model?.let {
+                                    result.add(model)
+                                }
+                            }
+                            mAdapter.models = result
+                        }
+                }
+        }
+    }
 
+    override fun onClickSort(key: String, direction: String) {
+        val a = mAdapter.models
+        if (key == "name" && direction == "DESCENDING"){
+        a.sortByDescending {
+            it.name
+        }
+        }else if (key == "summa" && direction == "DESCENDING"){
+            a.sortByDescending {
+                it.summa
+            }
+        }else if (key == "date" && direction == "DESCENDING"){
+            a.sortByDescending {
+                it.date
+            }
+        }else if (key == "name" && direction == "ASCENDING"){
+            a.sortBy {
+                it.name
+            }
+        }else if (key == "summa" && direction == "ASCENDING"){
+            a.sortBy {
+                it.summa
+            }
+        }else if (key == "date" && direction == "ASCENDING"){
+            a.sortBy {
+                it.date
+            }
+        }
+        a.forEach { _ ->
+            mAdapter.models = a
+        }
+    }
 }

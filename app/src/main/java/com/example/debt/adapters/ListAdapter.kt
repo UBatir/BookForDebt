@@ -46,7 +46,7 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
         }
     }
 
-    var models: List<Contact> = listOf()
+    var models: MutableList<Contact> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()

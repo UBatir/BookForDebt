@@ -5,6 +5,6 @@ import com.google.firebase.firestore.Query
 
 interface SortClickListener {
 
-    fun onClickSort(key: String, direction: Query.Direction)
+    fun onClickSort(key: String, direction: String)
 
 }
