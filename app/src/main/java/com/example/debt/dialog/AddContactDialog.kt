@@ -101,21 +101,12 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             map["name"] = actvName.text.toString()
             map["comment"] = etKommentariy.text.toString()
             map["summa"] = summa
-            map["date"] = tvSane.text.toString()
             map["debt"]=debt
             map["time"]=time
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
         db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(map)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Было добавлено", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, it.localizedMessage, Toast.LENGTH_LONG).show()
-            }
-        }else{
-            Toast.makeText(context, "Заполните поля", Toast.LENGTH_SHORT).show()
-        }
-    }
+            .addOnFailureListener { Toast.makeText(context, it.localizedMessage, Toast.LENGTH_LONG).show() }
+        }else{ Toast.makeText(context, "Заполните поля", Toast.LENGTH_SHORT).show() } }
 
     private fun populatePeopleList() {
         mPeopleList.clear()

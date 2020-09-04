@@ -5,19 +5,16 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_qosiw"
+            android:id="@+id/nav_addContact"
             android:title="Добавить контакт" />
         <item
-            android:id="@+id/nav_tariyx"
+            android:id="@+id/nav_history"
             android:title="История операций" />
         <item
-            android:id="@+id/nav_rezerv"
-            android:title="Резервные копии" />
-        <item
-            android:id="@+id/nav_sazlaw"
-            android:title="Настройки" />
-        <item
-            android:id="@+id/nav_dastur"
+            android:id="@+id/nav_aboutProgram"
             android:title="О программе" />
+        <item
+            android:id="@+id/nav_exitFromAccount"
+            android:title="Выход" />
     </group>
 </menu>

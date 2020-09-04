@@ -45,14 +45,8 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         recyclerViewHistory.adapter=mAdapter
-        val a = intent.getStringExtra("key")
             spinnerData()
-        if (!a.isNullOrEmpty()){
-            getDataToHistory()
-        }else{
-        getAllHistory()
-        }
-        ivSort.setOnClickListener {
+                ivSort.setOnClickListener {
             val dialog = DialogSort(this, this)
             dialog.show()
         }
@@ -92,46 +86,10 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
           }
 
-    private fun getDataToHistory(){
-        val result: MutableList<Contact> = mutableListOf()
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Toast.makeText(
-                        applicationContext,
-                        error.message.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@addSnapshotListener
-                }
-                result.clear()
-                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection(
-                    "history"
-                )
-                val a = intent.getStringExtra("key")
-                val query : Query = idsRef.whereEqualTo("name", a)
-                query.get()
-                    .addOnSuccessListener {
-                        it.documents.forEach { doc ->
-                            val model = doc.toObject(Contact::class.java)
-                            model?.id = doc.id
-                            model?.let {
-                                result.add(model)
-                            }
-                        }
-                        mAdapter.models = result
-                    }
-            }
-    }
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home -> {
-                val intent = Intent(
-                    this,
-                    MainActivity::class.java
-                )
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -211,9 +169,12 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (parent!!.getItemAtPosition(position).toString() == "Все контакты") {
+        val b = intent.getStringExtra("key")
+        if (parent!!.getItemAtPosition(position).toString()==b) {
+            getDataToHistory()
+        }else if(parent.getItemAtPosition(position).toString() == "Все контакты"){
             getAllHistory()
-        } else {
+        }else {
             val result: MutableList<Contact> = mutableListOf()
             db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
                 .addSnapshotListener { value, error ->
@@ -244,6 +205,38 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                         }
                 }
         }
+    }
+
+    private fun getDataToHistory(){
+        val result: MutableList<Contact> = mutableListOf()
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Toast.makeText(
+                        applicationContext,
+                        error.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@addSnapshotListener
+                }
+                result.clear()
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection(
+                    "history"
+                )
+                val a = intent.getStringExtra("key")
+                val query : Query = idsRef.whereEqualTo("name", a)
+                query.get()
+                    .addOnSuccessListener {
+                        it.documents.forEach { doc ->
+                            val model = doc.toObject(Contact::class.java)
+                            model?.id = doc.id
+                            model?.let {
+                                result.add(model)
+                            }
+                        }
+                        mAdapter.models = result
+                    }
+            }
     }
 
     @SuppressLint("SimpleDateFormat")

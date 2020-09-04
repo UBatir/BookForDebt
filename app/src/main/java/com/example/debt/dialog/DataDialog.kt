@@ -18,12 +18,11 @@ class DataDialog(context: Context, private val listener: SetData):Dialog(context
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.dialog_data)
+            setInitialDateTime()
         calendarView.setOnDateChangeListener{ _, year, month, dayOfMonth ->
             btnPositive.setOnClickListener {
                 val data ="$dayOfMonth.${month + 1}.$year"
-                setInitialDateTime()
                 val time=tvTime.text.toString()
-                dismiss()
                 listener.setData(data,time)
                 dismiss()
             }

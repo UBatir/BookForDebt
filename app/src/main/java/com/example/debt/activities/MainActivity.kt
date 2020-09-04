@@ -1,6 +1,7 @@
 package com.example.debt.activities
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -17,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.debt.R
-import com.example.debt.adapters.HistoryAdapter
 import com.example.debt.adapters.ListAdapter
 import com.example.debt.data.Contact
 import com.example.debt.dialog.AddContactDialog
@@ -31,12 +31,11 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.dialog_rename.*
+import kotlinx.android.synthetic.main.dialog_data.*
 import kotlinx.android.synthetic.main.item_contact.*
 
 
@@ -83,23 +82,38 @@ class MainActivity : AppCompatActivity(),
         toggle.syncState()
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_qosiw -> {
+                R.id.nav_addContact -> {
                     val dialog =
                         AddContactDialog(this, this)
                     dialog.show()
                 }
-                R.id.nav_tariyx -> {
+                R.id.nav_history -> {
                     val intent = Intent(this, HistoryActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.nav_rezerv -> {
-
+                R.id.nav_aboutProgram -> {
+                    val dialog = AlertDialog.Builder(this)
+                    dialog.setTitle("О программе")
+                    dialog.setMessage(
+                        "Записная книжка призванная " +
+                                "стать помощниом в учете долгов и займов"
+                    ).show()
                 }
-                R.id.nav_sazlaw -> {
-
-                }
-                R.id.nav_dastur -> {
-
+                R.id.nav_exitFromAccount->{
+                    val dialog = AlertDialog.Builder(this)
+                    dialog.setTitle("Выход из аккаунта")
+                    dialog.setMessage("Вы действительно хотите выйти из аккаунта?"
+                    )
+                    dialog.setPositiveButton("OK") { _, _->
+                        mAuth.signOut()
+                        val intent = Intent(this,LoginActivity::class.java)
+                        intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                        finish()
+                    }
+                    dialog.setNegativeButton("Отмена"){_,_->
+                    }
+                    dialog.show()
                 }
                 else -> return@setNavigationItemSelectedListener false
             }
@@ -227,7 +241,7 @@ class MainActivity : AppCompatActivity(),
                                     "Это операция также удалит всю историю, связанную с выбранным контактом"
                         )
                         dialog.setPositiveButton("Очистить") { _, _ ->
-                            cleanHistory()
+                            cleanHistory(id)
                         }
                         dialog.setNegativeButton("ОТМЕНА") { _, _ ->
                         }
@@ -266,7 +280,7 @@ class MainActivity : AppCompatActivity(),
             optionsMenu.show()
         }
     }
-    private fun cleanHistory(){
+    private fun cleanHistory(id: String){
         val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
         val query : Query = idsRef.whereEqualTo("name", tvName.text.toString())
         query.get()
@@ -279,14 +293,11 @@ class MainActivity : AppCompatActivity(),
         val queryZero: Query = zeroSum.whereEqualTo("name", tvName.text.toString())
         queryZero.get()
             .addOnSuccessListener { e->
-                val update= hashMapOf<String,Any>(
+                val updates= hashMapOf<String,Any>(
                     "summa" to 0,
                     "debt" to -1
                 )
-                e.documents.forEach{k->
-                    k.reference.update(update)
-                }
-
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(updates)
             }
     }
 

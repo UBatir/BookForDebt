@@ -133,7 +133,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
             })
             btnPlus.setOnClickListener{
                 if (etSumma.text.toString().trim() == ""||etSumma.text.toString().toInt()==0) {
-                    Toast.makeText(context,"Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
+                    Toast.makeText(context,"Сумма не задана или равна нулю. Ведите не нулевое значение!",
                         Toast.LENGTH_SHORT).show()
                 } else{
                     val a=etSumma.text.toString().toInt()
@@ -166,7 +166,6 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                         "summa" to a,
                         "name" to tvName.text.toString(),
                         "debt" to currentContact.debt,
-                        "date" to tvSane.text.toString(),
                         "comment" to etKommentariy.text.toString(),
                         "time" to time
                     )
@@ -177,7 +176,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
             }
             btnMinus.setOnClickListener{
                 if (etSumma.text.toString().trim() == ""||etSumma.text.toString().toInt()==0) {
-                    Toast.makeText(context,"Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
+                    Toast.makeText(context,"Сумма не задана или равна нулю. Ведите не нулевое значение!",
                         Toast.LENGTH_SHORT).show()
                 }
                 else{
@@ -226,7 +225,6 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
                         "name" to tvName.text.toString(),
                         "debt" to 0,
                         "time" to time,
-                        "date" to tvSane.text.toString(),
                         "comment" to etKommentariy.text.toString()
                     )
                     db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(updates)

@@ -35,22 +35,14 @@
                 android:textColor="#DE000000"/>
 
             <TextView
-                android:id="@+id/tvData"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvName"
-                android:layout_marginStart="@dimen/margin_standard" />
-
-            <TextView
                 android:id="@+id/tvComment"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/tvTimeHistory"
-                app:layout_constraintTop_toTopOf="@id/tvData"
+                app:layout_constraintTop_toTopOf="@id/tvTimeHistory"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="@dimen/margin_standard"
-                app:layout_constraintBottom_toBottomOf="@id/tvData"
+                app:layout_constraintBottom_toBottomOf="@id/tvTimeHistory"
                 android:text="Comment"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -60,11 +52,10 @@
                 android:id="@+id/tvTimeHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:text="23:30"
-                app:layout_constraintTop_toTopOf="@id/tvData"
-                app:layout_constraintBottom_toBottomOf="@id/tvData"
-                app:layout_constraintStart_toEndOf="@id/tvData"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
             <TextView
                 android:id="@+id/tvSumma"
