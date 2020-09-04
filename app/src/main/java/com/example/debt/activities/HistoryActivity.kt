@@ -1,12 +1,15 @@
 package com.example.debt.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -22,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.app_bar_history.*
 import kotlinx.android.synthetic.main.content_history.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, SortClickListener {
@@ -48,7 +53,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
         getAllHistory()
         }
         ivSort.setOnClickListener {
-            val dialog = DialogSort(this,this)
+            val dialog = DialogSort(this, this)
             dialog.show()
         }
     }
@@ -72,7 +77,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                 resultName.clear()
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").get()
                     .addOnSuccessListener {
-                        it.documents.forEach {doc ->
+                        it.documents.forEach { doc ->
                             val model = doc.toObject(Contact::class.java)
                             val name = model?.name
                             model?.id = doc.id
@@ -80,7 +85,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                                 resultName.add(name!!)
                             }
                         }
-                        resultName.add(0,"Все контакты")
+                        resultName.add(0, "Все контакты")
                         spinner.adapter = adapter
                         spinner.onItemSelectedListener = this
                     }
@@ -100,12 +105,14 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                     return@addSnapshotListener
                 }
                 result.clear()
-                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection(
+                    "history"
+                )
                 val a = intent.getStringExtra("key")
                 val query : Query = idsRef.whereEqualTo("name", a)
                 query.get()
                     .addOnSuccessListener {
-                        it.documents.forEach {doc ->
+                        it.documents.forEach { doc ->
                             val model = doc.toObject(Contact::class.java)
                             model?.id = doc.id
                             model?.let {
@@ -120,7 +127,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            android.R.id.home->{
+            android.R.id.home -> {
                 val intent = Intent(
                     this,
                     MainActivity::class.java
@@ -133,7 +140,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
     }
 
     fun onOptionsButtonClick(view: View, contact: Contact, id: String){
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {doc->
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener { doc->
             val optionsMenu= PopupMenu(this, view)
             val menuInflater=optionsMenu.menuInflater
             menuInflater.inflate(R.menu.menu_history_options, optionsMenu.menu)
@@ -161,7 +168,9 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
         }
     }
     private fun deleteData(id: String){
-        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(id)
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document(
+            id
+        )
             .delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Данные были удалены", Toast.LENGTH_SHORT).show()
@@ -185,7 +194,7 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
                 result.clear()
                  db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").get()
                     .addOnSuccessListener {
-                        it.documents.forEach {doc ->
+                        it.documents.forEach { doc ->
                             val model = doc.toObject(Contact::class.java)
                             model?.id = doc.id
                             model?.let {
@@ -237,6 +246,8 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClickSort(key: String, direction: String) {
         val a = mAdapter.models
         if (key == "name" && direction == "DESCENDING"){
@@ -249,7 +260,10 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
         }else if (key == "date" && direction == "DESCENDING"){
             a.sortByDescending {
-                it.date.toLong()
+                val formatter = SimpleDateFormat("dd.MM.yyyy hh:mm")
+                val date = formatter.parse(it.time)
+                val dateInLong = date.time
+                dateInLong
             }
         }else if (key == "name" && direction == "ASCENDING"){
             a.sortBy {
@@ -261,7 +275,10 @@ class HistoryActivity : AppCompatActivity(),AdapterView.OnItemSelectedListener, 
             }
         }else if (key == "date" && direction == "ASCENDING"){
             a.sortBy {
-                it.date.toLong()
+                val formatter = SimpleDateFormat("dd.MM.yyyy hh:mm")
+                    val date = formatter.parse(it.time)
+                    val dateInLong = date.time
+                    dateInLong
             }
         }
         a.forEach { _ ->

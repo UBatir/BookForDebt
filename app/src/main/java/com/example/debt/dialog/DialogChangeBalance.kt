@@ -45,13 +45,13 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
             val year=c.get(Calendar.YEAR)
             val month=c.get(Calendar.MONTH)
             val day=c.get(Calendar.DAY_OF_MONTH)
-            tvSane.text="$day${month+1}$year"
+            tvSane.text="$day.${month + 1}.$year"
             val hour =c.get(Calendar.HOUR_OF_DAY)
             val minute=c.get(Calendar.MINUTE)
             time = if(minute<10){
-                "$hour:0$minute"
+                "$day.${month+1}.$year $hour:0$minute"
             }else{
-                "$hour:$minute"
+                "$day.${month+1}.$year $hour:$minute"
             }
             tvSane.setOnClickListener{
                 val dialog= DataDialog(context, this)
@@ -247,7 +247,7 @@ class DialogChangeBalance(private val activity: MainActivity, val id: String): D
 
     override fun setData(data: String,time:String) {
         tvSane.text=data
-        this.time =time
+        this.time ="$data $time"
     }
 
     override fun setSum(sum: Long) {

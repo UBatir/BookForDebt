@@ -58,13 +58,13 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         val year=c.get(Calendar.YEAR)
         val month=c.get(Calendar.MONTH)
         val day=c.get(Calendar.DAY_OF_MONTH)
-        tvSane.text="$day${month+1}$year"
+        tvSane.text="$day.${month+1}.$year"
         val hour =c.get(Calendar.HOUR_OF_DAY)
         val minute=c.get(Calendar.MINUTE)
         time = if(minute<10){
-            "$hour:0$minute"
+            "$day.${month+1}.$year $hour:0$minute"
         }else{
-            "$hour:$minute"
+            "$day.${month+1}.$year $hour:$minute"
         }
 
         btnBiykarlaw.setOnClickListener {
@@ -143,7 +143,7 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
 
     override fun setData(data: String,time:String) {
         tvSane.text=data
-        this.time =time
+        this.time ="$data $time"
     }
 
     override fun setSum(sum: Long) {

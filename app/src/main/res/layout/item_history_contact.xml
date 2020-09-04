@@ -39,7 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="30.08.2020"
                 app:layout_constraintTop_toBottomOf="@id/tvName"
                 android:layout_marginStart="@dimen/margin_standard" />
 
@@ -60,7 +59,7 @@
             <TextView
                 android:id="@+id/tvTimeHistory"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginStart="8dp"
                 android:text="23:30"
                 app:layout_constraintTop_toTopOf="@id/tvData"
