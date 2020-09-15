@@ -23,11 +23,11 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:maxLength="18"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvSumma"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Adamnin ati"
-                android:singleLine="true"
                 android:maxLines="1"
+                android:singleLine="true"
                 android:layout_marginStart="@dimen/margin_standard"
                 android:layout_marginTop="@dimen/margin_standard"
                 android:textStyle="bold"
@@ -35,29 +35,42 @@
                 android:textColor="#DE000000"/>
 
             <TextView
-                android:id="@+id/tvKommentariy"
-                android:layout_width="300dp"
-                android:layout_height="20dp"
-                android:textStyle="italic"
+                android:id="@+id/tvComment"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/tvTimeHistory"
+                app:layout_constraintTop_toTopOf="@id/tvTimeHistory"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/margin_standard"
+                app:layout_constraintBottom_toBottomOf="@id/tvTimeHistory"
+                android:text="Comment"
                 android:singleLine="true"
                 android:maxLines="1"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/tvTimeHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:text="23:30"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvName"
-                android:text="Kommentariy"
-                android:layout_marginStart="@dimen/margin_standard" />
+                app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
             <TextView
                 android:id="@+id/tvSumma"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btnOptions"
-                android:layout_marginEnd="@dimen/margin_standard"
-                android:maxLength="14"
+                app:layout_constraintTop_toTopOf="@id/tvName"
+                app:layout_constraintBottom_toBottomOf="@id/tvName"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="8dp"
                 android:text="100"
+                android:maxLength="14"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
 
             <ImageView
                 android:id="@+id/btnOptions"

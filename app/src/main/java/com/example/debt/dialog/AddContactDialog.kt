@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_add_contact.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class AddContactDialog(context: Context, private val activity: MainActivity):Dialog(context),
     SetData {
@@ -24,8 +25,11 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
     private lateinit var mPeopleList:ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
-    val db=FirebaseFirestore.getInstance()
-    val mAuth=FirebaseAuth.getInstance()
+    private val db=FirebaseFirestore.getInstance()
+    private val mAuth=FirebaseAuth.getInstance()
+    var currentContact = Contact()
+    var summa:Long=0
+    private var time: String=""
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,50 +59,14 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         val month=c.get(Calendar.MONTH)
         val day=c.get(Calendar.DAY_OF_MONTH)
         tvSane.text="$day.${month+1}.$year"
-        btnPayda.setOnClickListener {
-            if(actvName.text.toString() == ""){
-                Toast.makeText(context, "Ati kirgizilmegen, qosatin esset joq!", Toast.LENGTH_SHORT).show()
-            } else if(etSumma.text.toString()==""||etSumma.text.toString().toLong().toInt()==0){
-                Toast.makeText(
-                    context,
-                    "Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else{
-                activity.addContact(
-                    Contact(
-                        actvName.text.toString(),
-                        etKommentariy.text.toString(),
-                        etSumma.text.toString().toLong(),
-                        "$day.${month + 1}.$year",
-                        1
-                    )
-                )
-                dismiss()
-            }
+        val hour =c.get(Calendar.HOUR_OF_DAY)
+        val minute=c.get(Calendar.MINUTE)
+        time = if(minute<10){
+            "$day.${month+1}.$year $hour:0$minute"
+        }else{
+            "$day.${month+1}.$year $hour:$minute"
         }
-        btnQariz.setOnClickListener{
-            if(actvName.text.toString() == ""){
-                Toast.makeText(context, "Ati kirgizilmegen, qosatin esset joq!", Toast.LENGTH_SHORT).show()
-            } else if(etSumma.text.toString()==""||etSumma.text.toString().toInt()==0){
-                Toast.makeText(
-                    context,
-                    "Summa kirgizilmegen yamasa nolge ten. Nolge ten emes san kirgizin!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else{
-                activity.addContact(
-                    Contact(
-                        actvName.text.toString(),
-                        etKommentariy.text.toString(),
-                        -etSumma.text.toString().toLong(),
-                        "$day.${month + 1}.$year",
-                        0
-                    )
-                )
-                dismiss()
-            }
-        }
+
         btnBiykarlaw.setOnClickListener {
             dismiss()
         }
@@ -112,8 +80,33 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
             dialog.show()
         }
 
+        btnPayda.setOnClickListener {
+            currentContact.debt=1
+            summa= etSumma.text.toString().toLong()
+            addContact(currentContact.debt,summa)
+            dismiss()
+        }
+
+        btnQariz.setOnClickListener {
+            currentContact.debt=0
+            summa=-etSumma.text.toString().toLong()
+            addContact(currentContact.debt,summa)
+            dismiss()
+        }
     }
 
+    fun addContact(debt:Int,summa: Long){
+        if (actvName.text.isNotEmpty() && etSumma.text!!.isNotEmpty()){
+            val map: MutableMap<String, Any> = mutableMapOf()
+            map["name"] = actvName.text.toString()
+            map["comment"] = etKommentariy.text.toString()
+            map["summa"] = summa
+            map["debt"]=debt
+            map["time"]=time
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document().set(map)
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history").document().set(map)
+            .addOnFailureListener { Toast.makeText(context, it.localizedMessage, Toast.LENGTH_LONG).show() }
+        }else{ Toast.makeText(context, "Заполните поля", Toast.LENGTH_SHORT).show() } }
 
     private fun populatePeopleList() {
         mPeopleList.clear()
@@ -139,11 +132,12 @@ class AddContactDialog(context: Context, private val activity: MainActivity):Dia
         activity.startManagingCursor(people)
     }
 
-    override fun setData(data: String) {
+    override fun setData(data: String,time:String) {
         tvSane.text=data
+        this.time ="$data $time"
     }
 
     override fun setSum(sum: Long) {
-        etSumma.setText("$sum")
+        etSumma.setText(sum.toString())
     }
 }

@@ -10,7 +10,6 @@ import com.example.debt.R
 import com.example.debt.activities.MainActivity
 import com.example.debt.data.Contact
 import com.example.debt.interfaces.ContactItemClickListener
-import kotlinx.android.synthetic.main.dialog_change_balance.view.tvName
 import kotlinx.android.synthetic.main.dialog_change_balance.view.tvSumma
 import kotlinx.android.synthetic.main.item_contact.view.*
 
@@ -47,7 +46,7 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
         }
     }
 
-    var models: List<Contact> = listOf()
+    var models: MutableList<Contact> = mutableListOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -63,4 +62,5 @@ class ListAdapter(private val activity: MainActivity, private val listener: Cont
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         holder.populateModel(models[position],activity)
     }
+
 }

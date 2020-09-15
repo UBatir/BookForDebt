@@ -20,7 +20,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         supportActionBar?.hide()
         btnRegisterFinish.setOnClickListener {
-            if(etLogin.text.isNullOrEmpty()&&etPassword.text.isNullOrEmpty()){
+            if(!etLogin.text.isNullOrEmpty() && !etPassword.text.isNullOrEmpty()){
                 loading.visibility= View.VISIBLE
                 mAuth.createUserWithEmailAndPassword(
                     etLogin.text.toString(),

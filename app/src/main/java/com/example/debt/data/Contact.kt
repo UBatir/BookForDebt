@@ -1,3 +1,11 @@
 package com.example.debt.data
 
-class Contact(name:String,comment:String,summa:Long,date:String,debt:Int)
+
+data class Contact(var name:String=" ",
+              var comment:String? = " ",
+              var summa: Long = 0,
+              var date: String ="",
+              var debt:Int = 0,
+              var id: String = "",
+              var time:String=""
+)

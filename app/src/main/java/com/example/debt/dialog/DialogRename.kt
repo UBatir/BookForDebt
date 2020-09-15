@@ -7,19 +7,25 @@ import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.SimpleAdapter
 import com.example.debt.R
-import com.example.debt.data.Contact
 import com.example.debt.activities.MainActivity
+import com.example.debt.data.Contact
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.dialog_rename.*
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
-class DialogRename(private val id: Int,private val activity: MainActivity): Dialog(activity) {
 
-    lateinit var dao:ContactDao
-    lateinit var currentContact: Contact
+class DialogRename(private val id: String, private val activity: MainActivity): Dialog(activity) {
+
+    private var currentContact = Contact()
     private lateinit var mPeopleList: ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
+    private val db= FirebaseFirestore.getInstance()
+    private val mAuth= FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,19 +46,30 @@ class DialogRename(private val id: Int,private val activity: MainActivity): Dial
                 mTxtPhoneNo.setSelection(mTxtPhoneNo.text!!.length)
             }
 
-        dao=NotebookDatabase.getInstance(activity).dao()
-        currentContact=dao.getContactById(id)
-        actvRename.setText(currentContact.name)
-        actvRename.setSelection(actvRename.text.length)
-        tvRename.text = currentContact.name
-        btnAtinOzgertiw.setOnClickListener {
-            currentContact.name=actvRename.text.toString()
-            activity.rewriteContact(currentContact)
-            dismiss()
-        }
-        btnBiykarlaw.setOnClickListener {
-            dismiss()
-        }
+        db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).get().addOnSuccessListener {
+            actvRename.setText(it.get("name").toString())
+            actvRename.setSelection(actvRename.text.length)
+            tvRename.text = it.get("name").toString()
+            btnAtinOzgertiw.setOnClickListener {
+                val update = hashMapOf<String, Any>(
+                    "name" to actvRename.text.toString()
+                )
+                db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data").document(id).update(update)
+
+                val idsRef: CollectionReference = db.collection("contacts").document(mAuth.currentUser!!.uid).collection("history")
+                val query : Query = idsRef.whereEqualTo("name", tvRename.text.toString())
+                query.get()
+                    .addOnSuccessListener {i->
+                        i.documents.forEach { et ->
+                            et.reference.update(update)
+
+                        }
+                    }
+                dismiss()
+            }
+            btnBiykarlaw.setOnClickListener {
+                dismiss()
+            }}
     }
     private fun populatePeopleList() {
         mPeopleList.clear()

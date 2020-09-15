@@ -22,7 +22,7 @@ class   LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         btnLogin.setOnClickListener {
-            if(etLogin.text.isNullOrEmpty()&&etPassword.text.isNullOrEmpty()){
+            if(!etLogin.text.isNullOrEmpty() && !etPassword.text.isNullOrEmpty()){
                 loading.visibility=View.VISIBLE
                 mAuth.signInWithEmailAndPassword(etLogin.text.toString(),etPassword.text.toString())
                     .addOnCompleteListener {
@@ -57,6 +57,7 @@ class   LoginActivity : AppCompatActivity() {
         if(user!=null){
             val intent=Intent(this,MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

@@ -27,8 +27,7 @@
         app:layout_constraintStart_toStartOf="@id/tvTitleBalanstiOzgertiw"
         app:layout_constraintEnd_toStartOf="@id/tvSumma"
         app:layout_constraintTop_toBottomOf="@id/tvTitleBalanstiOzgertiw"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:text="qwertyuiop" />
+        android:layout_marginTop="@dimen/margin_standard" />
 
     <TextView
         android:id="@+id/tvSumma"
@@ -38,8 +37,7 @@
         app:layout_constraintEnd_toEndOf="@id/tvTitleBalanstiOzgertiw"
         app:layout_constraintTop_toBottomOf="@id/tvTitleBalanstiOzgertiw"
         android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginStart="8dp"
-        android:text="200"/>
+        android:layout_marginStart="8dp" />
 
     <View
         android:id="@+id/line"
@@ -134,7 +132,6 @@
         app:layout_constraintEnd_toEndOf="@id/btnMinus"
         app:layout_constraintTop_toBottomOf="@id/btnMinus"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="1234"
         android:inputType="textMultiLine"
         android:lines="2"
         android:maxLength="12"
@@ -149,7 +146,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/btnPlus"
         app:layout_constraintTop_toBottomOf="@id/btnPlus"
-        android:text="1234"
         android:inputType="textMultiLine"
         android:lines="2"
         android:maxLength="12"
