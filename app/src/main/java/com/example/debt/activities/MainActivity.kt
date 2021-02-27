@@ -136,12 +136,12 @@ class MainActivity : AppCompatActivity(),
     private fun getData(){
         val result: MutableList<Contact> = mutableListOf()
                 db.collection("contacts").document(mAuth.currentUser!!.uid).collection("data")
-                    .addSnapshotListener { value, error ->
+                    .addSnapshotListener { _, error ->
                     if (error != null) {
                         Toast.makeText(
                             applicationContext,
                             error.message.toString(),
-                            Toast.LENGTH_LONG
+                              Toast.LENGTH_LONG
                         ).show()
                         return@addSnapshotListener
                     }

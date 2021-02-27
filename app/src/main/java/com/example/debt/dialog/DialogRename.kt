@@ -20,7 +20,6 @@ import java.util.*
 
 class DialogRename(private val id: String, private val activity: MainActivity): Dialog(activity) {
 
-    private var currentContact = Contact()
     private lateinit var mPeopleList: ArrayList<Map<String, String>>
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var mTxtPhoneNo: AutoCompleteTextView
